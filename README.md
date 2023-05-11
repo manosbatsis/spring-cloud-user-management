@@ -11,7 +11,7 @@
   * [Docker Reference](#docker-reference)
     * [user-service](#user-service)
     * [event-service](#event-service)
-    * [event-service](#event-service-1)
+    * [email-service](#email-service)
     * [Useful Commands](#useful-commands)
       * [MySQL](#mysql)
       * [Cassandra](#cassandra)
@@ -77,7 +77,7 @@ You can append `-x test` and/or omit `integrationTest` to skip unit and integrat
    `./start-apps.sh`
 
 3. To create a user, visit the `user-service` swagger at http://localhost:9080/swagger-ui/index.html
-    ([preview](user-service-swagger-create-user.png)) or run:
+    ([preview](https://raw.githubusercontent.com/manosbatsis/spring-cloud-user-management-java/src/doc/img/user-service-swagger-create-user.png)) or run:
 
 ```
 curl -X 'POST' \
@@ -152,7 +152,7 @@ The following URLs are accessible locally when using the start-apps script:
     | `ZIPKIN_HOST`          | Specify host of the `Zipkin` distributed tracing system to use (default `localhost`) |
     | `ZIPKIN_PORT`          | Specify port of the `Zipkin` distributed tracing system to use (default `9411`)      |
 
-### event-service
+### email-service
 
     | Environment Variable   | Description                                                                          |
     |------------------------|--------------------------------------------------------------------------------------|
