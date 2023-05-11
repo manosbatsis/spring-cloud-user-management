@@ -1,0 +1,98 @@
+server:
+    port: 9081
+
+spring:
+    application:
+        name: event-service
+    data:
+        cassandra:
+            keyspace-name: manosbatsis
+            contact-points: ${CASSANDRA_HOST:cassandra}:${CASSANDRA_PORT:9042}
+            local-datacenter: datacenter1
+            schema-action: CREATE_IF_NOT_EXISTS
+            request:
+                timeout: 20s
+    cloud:
+        schema-registry-client:
+            endpoint: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
+        stream:
+            function:
+                definition: users
+            kafka:
+                binder:
+                    brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+                    # auto-add-partitions: true # (*) both user-service and event-service can create topic and add partitions
+                    # auto-create-topics: true
+                    # enable-observation: true
+            bindings:
+                users-in-0:
+                    group: eventServiceGroup
+                    destination: users-topic
+                    content-type: application/json # it's redundant here, 'application/json' is the default
+                    consumer:
+                        auto-offset-reset: earliest
+    main:
+        allow-bean-definition-overriding: true
+
+management:
+    endpoints:
+        web:
+            exposure.include: beans, env, health, info, metrics, mappings
+    endpoint:
+        health:
+            show-details: always
+    health:
+        probes:
+            enabled: true
+    tracing:
+        sampling:
+            probability: 1.0
+    zipkin:
+        tracing:
+            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
+
+springdoc:
+    show-actuator: true
+    swagger-ui:
+        groups-order: DESC
+        disable-swagger-default-url: true
+
+logging:
+    level:
+        root: ${LOG_LEVEL_ROOT:info}
+        org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: warn
+        org.springframework:
+            cloud: debug
+            messaging: debug
+    pattern:
+        level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+---
+spring:
+    config:
+        activate:
+            on-profile: test
+
+management:
+    tracing:
+        enabled: false
+
+# In order to handle different content-types, Spring Cloud Stream has a "content-type negotiation and transformation"
+# strategy (https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/spring-cloud-stream.html#content-type-management).
+# The precedence orders are: 1st, content-type present in the message header; 2nd content-type defined in the binding;
+# and finally, content-type is "application/json" (default).
+#
+# The producer (in the case user-service) always sets the content-type in the message header. The content-type can be
+# "application/json" or "application/*+avro", depending on with which profile user-service is started.
+#
+# So, defining the content-type in the binding is not needed. Anyway, I will keep the definition here but commented.
+#---
+#spring:
+#  config:
+#    activate:
+#      on-profile: avro
+#  cloud:
+#    stream:
+#      bindings:
+#        input:
+#          content-type: application/*+avro
