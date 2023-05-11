@@ -1,4 +1,4 @@
-# spring-cloud-user-management-java
+# Spring Cloud User Management (Java) [![CI](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml)
 
 <!-- TOC -->
 * [spring-cloud-user-management-java](#spring-cloud-user-management-java)
