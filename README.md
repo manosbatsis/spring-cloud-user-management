@@ -24,7 +24,7 @@ Please note this codebase is not considered proper in any way and is only intend
 
 That said, it does accommodate the following requirements:
 
-1. It is a self-contained project based on [`Spring Boot`](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
+1. It is a self-contained project based on [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
 2. The build produces Docker images for it's service artifacts and can be run by a single shell script (see sections bellow)
 3. When creating a user, the `email-service` module will send out a welcome email. The project uses
    [GreenMail](https://greenmail-mail-test.github.io/greenmail/), an open source email server,
@@ -36,14 +36,14 @@ That said, it does accommodate the following requirements:
    [SpringDoc](https://springdoc.org/).
 6. Elementary microservices with
    [Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/) for
-   [`Event Sourcing`](https://martinfowler.com/eaaDev/EventSourcing.html), using [Kafka](https://kafka.apache.org/),
+   [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html), using [Kafka](https://kafka.apache.org/),
    using [Cassandra](https://cassandra.apache.org) for data storage.
 
 ### Prerequisites
 
-- [`Java 17+`](https://www.oracle.com/java/technologies/downloads/#java17)
-- [`Docker`](https://www.docker.com/)
-- [`Docker-Compose`](https://docs.docker.com/compose/install/)
+- [Java 17+](https://www.oracle.com/java/technologies/downloads/#java17)
+- [Docker](https://www.docker.com/)
+- [Docker-Compose](https://docs.docker.com/compose/install/)
 
 ### Modules
 
