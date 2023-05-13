@@ -24,7 +24,11 @@ configurations[integrationTest.compileOnlyConfigurationName].extendsFrom(configu
 //configurations[integrationTest.compileClasspathConfigurationName].extendsFrom(configurations.compileClasspath.get())
 
 val integrationTestTask = tasks.register<Test>("integrationTest") {
-    dependsOn(":event-service:docker", ":email-service:docker")
+    dependsOn(
+        ":config-service:docker",
+        ":discovery-service:docker",
+        ":event-service:docker",
+        ":email-service:docker")
     description = "Runs integration tests."
     group = "verification"
     useJUnitPlatform()
@@ -52,6 +56,7 @@ dependencies {
 
     implementation(libs.spring.cloud.schema.registry.client)
     //implementation("org.springframework.cloud:spring-cloud-schema-registry-client")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-stream")
     //implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-streams")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")

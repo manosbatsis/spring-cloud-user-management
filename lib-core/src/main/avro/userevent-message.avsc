@@ -1,5 +1,5 @@
 {
-	"namespace": "com.github.manosbatsis.userservice.messages",
+	"namespace": "com.github.manosbatsis.services.user.messages",
 	"type": "record",
 	"name": "UserEventMessage",
 	"fields": [

@@ -1,0 +1,92 @@
+
+server:
+    port: 9080
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8061}/eureka/
+  instance:
+      hostname: ${DISCOVERY_INSTANCE_HOST:user-service}
+
+spring:
+    application:
+        name: user-service
+    output:
+        ansi:
+            enabled: always
+    jpa:
+        hibernate:
+            ddl-auto: update
+    datasource:
+        url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/userdb?characterEncoding=UTF-8&serverTimezone=UTC
+        username: root
+        password: secret
+    cloud:
+        schema-registry-client:
+            endpoint: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
+        stream:
+            kafka:
+                binder:
+                    brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+                    # autoAddPartitions: true # (*) both user-service and event-service can create topic and add partitions
+                    autoCreateTopics: true
+                    # enable-observation: true
+            bindings:
+                users-out-0:
+                    destination: users-topic
+                    content-type: application/json
+                    producer:
+                        partitionCount: 3
+                        # partitionKeyExpression: 'getPayload().getUserId()'
+                        partition-key-expression: headers['partitionKey']
+    main:
+        allow-bean-definition-overriding: true
+
+management:
+    endpoints:
+        web:
+            exposure.include: beans, env, health, info, metrics, mappings
+    endpoint:
+        health:
+            show-details: always
+    health:
+        probes:
+            enabled: true
+    zipkin:
+        tracing:
+            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
+    tracing:
+        sampling:
+            probability: 1.0
+
+springdoc:
+    show-actuator: true
+    swagger-ui:
+        groups-order: DESC
+        disable-swagger-default-url: true
+    packagesToScan: com.github.manosbatsis.services.employee
+
+logging:
+    level:
+        root: ${LOG_LEVEL_ROOT:info}
+        com:
+            github:
+                manosbatsis: debug
+                dockerjava:
+                    zerodep:
+                        shaded:
+                            org:
+                                apache:
+                                    hc:
+                                        client5:
+                                            http:
+                                                wire: warn
+        org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: warn
+        org.springframework:
+            cloud: warn
+            messaging: warn
+    pattern: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name:},%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+
+
+

@@ -1,0 +1,79 @@
+
+server:
+    port: 9081
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8061}/eureka/
+  instance:
+      hostname: ${DISCOVERY_INSTANCE_HOST:event-service}
+
+spring:
+    application:
+        name: event-service
+    output:
+        ansi:
+            enabled: always
+    data:
+        cassandra:
+            keyspace-name: manosbatsis
+            contact-points: ${CASSANDRA_HOST:cassandra}:${CASSANDRA_PORT:9042}
+            local-datacenter: datacenter1
+            schema-action: CREATE_IF_NOT_EXISTS
+            request:
+                timeout: 20s
+    cloud:
+        schema-registry-client:
+            endpoint: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
+        stream:
+            function:
+                definition: users
+            kafka:
+                binder:
+                    brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+                    # auto-add-partitions: true # (*) both user-service and event-service can create topic and add partitions
+                    # auto-create-topics: true
+                    # enable-observation: true
+            bindings:
+                users-in-0:
+                    group: eventServiceGroup
+                    destination: users-topic
+                    content-type: application/json # it's redundant here, 'application/json' is the default
+                    consumer:
+                        auto-offset-reset: earliest
+    main:
+        allow-bean-definition-overriding: true
+
+management:
+    endpoints:
+        web:
+            exposure.include: beans, env, health, info, metrics, mappings
+    endpoint:
+        health:
+            show-details: always
+    health:
+        probes:
+            enabled: true
+    tracing:
+        sampling:
+            probability: 1.0
+    zipkin:
+        tracing:
+            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
+
+springdoc:
+    show-actuator: true
+    swagger-ui:
+        groups-order: DESC
+        disable-swagger-default-url: true
+
+logging:
+    level:
+        root: ${LOG_LEVEL_ROOT:info}
+        org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: warn
+        org.springframework:
+            cloud: warn
+            messaging: warn
+    pattern: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name:},%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+

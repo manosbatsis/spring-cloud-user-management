@@ -1,0 +1,87 @@
+
+server:
+    port: 9082
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8061}/eureka/
+  instance:
+      hostname: ${DISCOVERY_INSTANCE_HOST:email-service}
+
+spring:
+    application:
+        name: email-service
+    mail:
+        password: ${EMAIL_PASSWORD:password}
+        username: ${EMAIL_USER:user}
+        host: ${EMAIL_HOST:127.0.0.1}
+        port: ${EMAIL_PORT:3025} # default protocol port + 3000 as offset
+        protocol: smtp
+        properties:
+            mail:
+                smtp:
+                    from: ${EMAIL_FROM:noreply@localhost}
+    cloud:
+        schema-registry-client:
+            endpoint: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
+        stream:
+            function:
+                definition: users
+            kafka:
+                binder:
+                    brokers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:29092}
+                    # auto-add-partitions: true # (*) both user-service and event-service can create topic and add partitions
+                    # auto-create-topics: true
+                    # enable-observation: true
+            bindings:
+                users-in-0:
+                    group: emailServiceGroup
+                    destination: users-topic
+                    content-type: application/json # it's redundant here, 'application/json' is the default
+                    consumer:
+                        auto-offset-reset: earliest
+    main:
+        allow-bean-definition-overriding: true
+
+management:
+    endpoints:
+        web:
+            exposure.include: beans, env, health, info, metrics, mappings
+    endpoint:
+        health:
+            show-details: always
+    health:
+        probes:
+            enabled: true
+    tracing:
+        sampling:
+            probability: 1.0
+    zipkin:
+        tracing:
+            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
+
+springdoc:
+    show-actuator: true
+    swagger-ui:
+        groups-order: DESC
+        disable-swagger-default-url: true
+
+logging:
+    level:
+        root: ${LOG_LEVEL_ROOT:info}
+        org.apache.kafka.clients.consumer.internals.ConsumerCoordinator: warn
+        org.springframework:
+            cloud: warn
+            messaging: warn
+    pattern: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name:},%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+
+---
+spring:
+    config:
+        activate:
+            on-profile: test
+
+management:
+    tracing:
+        enabled: false

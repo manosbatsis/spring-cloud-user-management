@@ -28,6 +28,7 @@ dependencies {
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 
     implementation(libs.spring.cloud.schema.registry.client)
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
 
     implementation(libs.springdoc.openapi.starter.webmvc.ui)

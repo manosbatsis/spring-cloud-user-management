@@ -27,11 +27,8 @@ dependencies {
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 
     implementation(libs.spring.cloud.schema.registry.client)
-    //implementation("org.springframework.cloud:spring-cloud-schema-registry-client")
-    //implementation("org.springframework.cloud:spring-cloud-stream")
-    //implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-streams")
+    implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
-    //implementation("org.springframework.kafka:spring-kafka")
 
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.mapstruct.core)
@@ -44,8 +41,6 @@ dependencies {
     testImplementation("org.springframework.kafka:spring-kafka-test")
     testImplementation("org.testcontainers:cassandra")
     testImplementation("org.testcontainers:junit-jupiter")
-    //testImplementation(libs.awaitility)
-    //testImplementation(libs.awaitility.proxy)
     testImplementation(libs.cassandra.unit.spring)
 
 }

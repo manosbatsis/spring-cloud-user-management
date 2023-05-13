@@ -1,0 +1,12 @@
+
+spring:
+    cloud:
+        schema:
+            avro:
+                schema-locations:
+                    - classpath:avro/userevent-message.avsc
+        stream:
+            bindings:
+                users-out-0:
+                    content-type: application/*+avro
+
