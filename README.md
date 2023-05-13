@@ -34,16 +34,20 @@ That said, it does accommodate the following requirements:
    and extensive unit/integration tests using [JUnit5](https://junit.org/junit5/) and [TestContainers](https://www.testcontainers.org/).
 5. The individual microservices expose REST API documentation using OpenAPI 3, including Swagger UIs, using
    [SpringDoc](https://springdoc.org/).
-6. Elementary microservices with
-   [Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/) for
-   [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html), using [Kafka](https://kafka.apache.org/),
-   using [Cassandra](https://cassandra.apache.org) for data storage.
+6. Elementary microservices, including:
+   - External configuration service using [Spring Cloud Config](https://docs.spring.io/spring-cloud-config/docs/current/reference/html/).
+   - Service Registration and Discovery with [Spring Cloud Netflix](https://cloud.spring.io/spring-cloud-netflix/reference/html/).
+   - [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
+     using [Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/)
+     and [Kafka](https://kafka.apache.org/).
+   - Persistence using [Cassandra](https://cassandra.apache.org) and JPA with [MySQL](https://www.mysql.com/).
 
 ### Prerequisites
 
 - [Java 17+](https://www.oracle.com/java/technologies/downloads/#java17)
 - [Docker](https://www.docker.com/)
 - [Docker-Compose](https://docs.docker.com/compose/install/)
+- At least 7GB of **free** RAM
 
 ### Modules
 - config-service: Uses Spring Cloud Config Server as a configuration server in the `native` mode. The configuration files are placed on the classpath.
