@@ -4,7 +4,7 @@ server:
 eureka:
   client:
     serviceUrl:
-        defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8061}/eureka/
+        defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
 
 logging:
     pattern: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name:},%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"

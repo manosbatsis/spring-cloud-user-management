@@ -59,7 +59,7 @@ tasks.docker {
 
 docker {
     name = fullName
-    tag("latest", "$projectName:latest")
+    tag("latest", "$projectName:${project.version}")
     pull(true)
     setDockerfile(file(dockerFilePath))
     files(bootJarTask.outputs)

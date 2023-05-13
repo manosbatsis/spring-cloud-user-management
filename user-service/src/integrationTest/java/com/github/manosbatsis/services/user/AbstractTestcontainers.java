@@ -32,7 +32,7 @@ public abstract class AbstractTestcontainers {
     private static final GenericContainer greenMailContainer = new GenericContainer<>(DockerImageName.parse("greenmail/standalone:latest"));
 
     protected static String EVENT_SERVICE_API_URL;
-    private static final int DISCOVERY_SERVICE_EXPOSED_PORT = 8061;
+    private static final int DISCOVERY_SERVICE_EXPOSED_PORT = 8761;
     private static final int CONFIG_SERVICE_EXPOSED_PORT = 8088;
     private static final int EVENT_SERVICE_EXPOSED_PORT = 9081;
     private static final int EMAIL_SERVICE_EXPOSED_PORT = 9082;

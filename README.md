@@ -46,7 +46,8 @@ That said, it does accommodate the following requirements:
 - [Docker-Compose](https://docs.docker.com/compose/install/)
 
 ### Modules
-
+- config-service: Uses Spring Cloud Config Server as a configuration server in the `native` mode. The configuration files are placed on the classpath.
+- discovery-service: Uses Spring Cloud Netflix Eureka as an embedded discovery server.
 - user-service: RESTful API for `User` records. Uses JPA for RDBMS persistence.
   Acts as a producer for user events.
 - event-service: Consumer and RESTful API for user events. Uses Cassandra for persistence.

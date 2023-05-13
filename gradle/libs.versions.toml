@@ -1,6 +1,7 @@
 [versions]
 awaitility-version = '4.2.0'
 awaitility-proxy-version = '3.1.6'
+buildconfig-version = '3.1.0'
 cassandra-unit-version = '4.3.1.0'
 dokka-version = '1.8.10'
 evo-inflector-version = '1.3'
@@ -64,6 +65,7 @@ confluent-kafka-schema-registry-client = { module = "io.confluent:kafka-schema-r
 confluent-kafka-avro = ["confluent-kafka-serde-tools-package-serializer", "confluent-kafka-avro-serializer", "confluent-kafka-schema-registry-client"]
 
 [plugins]
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig-version" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version" }

@@ -1,11 +1,14 @@
 spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
+    config:
+        import: "optional:configserver:http://config-service:8088"
+        activate:
+            on-profile: docker
 ---
+server:
+    port: 8761
+
 spring:
-  application:
-    name: discovery-service
-  config:
-    import: "optional:configserver:http://localhost:8088"
+    application:
+        name: discovery-service
+    config:
+        import: "optional:configserver:http://localhost:8088"
