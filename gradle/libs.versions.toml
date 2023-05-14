@@ -22,6 +22,7 @@ spring-cloud-schema-registry-client-version = '1.1.5'
 spring-boot-management-version = '1.1.0'
 springdoc-version = '1.6.9'
 springdoc-openapi-starter-webmvc-ui-version = '2.1.0'
+springdoc-openapi-starter-webflux-version = '2.1.0'
 spotless-version = '6.18.0'
 strikt-version = '0.33.0'
 testcontainers-version = '1.18.0'
@@ -47,12 +48,15 @@ mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct-
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct-version" }
 strikt = { module = "io.strikt:strikt-core", version.ref = "strikt-version" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-starter-webmvc-ui-version" }
+springdoc-openapi-kotlin = { module = "org.springdoc:springdoc-openapi-kotlin", version.ref = "springdoc-version" }
+springdoc-openapi-starter-webflux-api = { module = "org.springdoc:springdoc-openapi-starter-webflux-api", version.ref = "springdoc-openapi-starter-webflux-version" }
+springdoc-openapi-starter-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-openapi-starter-webflux-version" }
+
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot-version" }
 spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud-version" }
 spring-cloud-schema-registry-client = { module = "org.springframework.cloud:spring-cloud-schema-registry-client", version.ref = "spring-cloud-schema-registry-client-version" }
 spring-cloud-stream-dependencies = { module = "org.springframework.cloud:spring-cloud-stream-dependencies", version.ref = "spring-cloud-stream-version" }
 spring-cloud-stream-schema = { module = "org.springframework.cloud:spring-cloud-stream-schema", version.ref = "spring-cloud-stream-schema-version" }
-springdoc-openapi-kotlin = { module = "org.springdoc:springdoc-openapi-kotlin", version.ref = "springdoc-version" }
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers-version" }
 rsql-jpa-spring-boot-starter = { module = "io.github.perplexhub:rsql-jpa-spring-boot-starter", version.ref = "perplexhub-rsql-version" }
 error-handling-spring-boot-starter = { module = "io.github.wimdeblauwe:error-handling-spring-boot-starter", version.ref = "wimdeblauwe-error-handling-spring-boot-version" }
