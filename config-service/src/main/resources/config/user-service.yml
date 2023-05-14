@@ -5,9 +5,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
-  instance:
-      hostname: ${DISCOVERY_INSTANCE_HOST:user-service}
+      defaultZone: http://${DISCOVERY_SERVICE_HOST:localhost}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
 
 spring:
     application:
@@ -53,15 +51,13 @@ management:
     health:
         probes:
             enabled: true
-    zipkin:
-        tracing:
-            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
     tracing:
         sampling:
             probability: 1.0
 
 springdoc:
     show-actuator: true
+    packagesToScan: com.github.manosbatsis.services.user
     swagger-ui:
         groups-order: DESC
         disable-swagger-default-url: true

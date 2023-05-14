@@ -3,7 +3,7 @@
 
 echo
 echo "Stopping services..."
-docker stop discovery-service email-service event-service user-service
+docker stop gateway-service discovery-service email-service event-service user-service
 
 echo
 echo "Stopping compose network..."

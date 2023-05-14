@@ -5,13 +5,16 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
+      defaultZone: http://${DISCOVERY_SERVICE_HOST:localhost}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
   instance:
       hostname: ${DISCOVERY_INSTANCE_HOST:email-service}
 
 spring:
     application:
         name: email-service
+    output:
+        ansi:
+            enabled: always
     mail:
         password: ${EMAIL_PASSWORD:password}
         username: ${EMAIL_USER:user}
@@ -57,9 +60,6 @@ management:
     tracing:
         sampling:
             probability: 1.0
-    zipkin:
-        tracing:
-            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
 
 springdoc:
     show-actuator: true
