@@ -122,10 +122,10 @@ curl -X 'GET' \
 
 The following URLs are accessible locally when using the start-apps script:
 
+- Gateway Service: http://localhost:8060/swagger-ui.html
 - User Service: http://localhost:9080/swagger-ui.html
 - Event Service: http://localhost:9081/swagger-ui.html
 - Email Service: http://localhost:9082/swagger-ui.html
-- Zipkin: http://localhost:9411
 - Zipkin: http://localhost:9411
 - Schema Registry UI: http://localhost:8001
 - Kafka Topics UI: http://localhost:8085
