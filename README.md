@@ -24,8 +24,8 @@ Please note this codebase is not considered proper in any way and is only intend
 
 That said, it does accommodate the following requirements:
 
-1. It is a self-contained project based on [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
-2. The build produces Docker images for it's service artifacts and can be run by a single shell script (see sections bellow)
+1. It is a self-contained Java project based on [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
+2. The build produces Docker images for all service artifacts and can be run by a single shell script (see sections bellow)
 3. When creating a user, the `email-service` module will send out a welcome email. The project uses
    [GreenMail](https://greenmail-mail-test.github.io/greenmail/), an open source email server,
    for unit/integration tests and docker (compose) networks.
@@ -33,14 +33,16 @@ That said, it does accommodate the following requirements:
    horizontally applied [RESTful error handling](https://github.com/wimdeblauwe/error-handling-spring-boot-starter)
    and extensive unit/integration tests using [JUnit5](https://junit.org/junit5/) and [TestContainers](https://www.testcontainers.org/).
 5. The individual microservices expose REST API documentation using OpenAPI 3, including Swagger UIs, using
-   [SpringDoc](https://springdoc.org/).
+   [SpringDoc](https://springdoc.org/). Swagger UIs are also aggregated in the gateway module.
 6. Elementary microservices, including:
-   - External configuration service using [Spring Cloud Config](https://docs.spring.io/spring-cloud-config/docs/current/reference/html/).
+   - Gateway service using  [Spring Cloud Gateway](https://cloud.spring.io/spring-cloud-gateway/reference/html/).
+   - External Configuration service using [Spring Cloud Config](https://docs.spring.io/spring-cloud-config/docs/current/reference/html/).
    - Service Registration and Discovery with [Spring Cloud Netflix](https://cloud.spring.io/spring-cloud-netflix/reference/html/).
    - [Event Sourcing](https://martinfowler.com/eaaDev/EventSourcing.html)
-     using [Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/)
-     and [Kafka](https://kafka.apache.org/).
+    using [Spring Cloud Stream](https://docs.spring.io/spring-cloud-stream/docs/current/reference/html/)
+    and [Kafka](https://kafka.apache.org/).
    - Persistence using [Cassandra](https://cassandra.apache.org) and JPA with [MySQL](https://www.mysql.com/).
+7. Distributed tracing and timing/latency data with [Zipkin](https://zipkin.io/).
 
 ### Prerequisites
 
@@ -50,6 +52,7 @@ That said, it does accommodate the following requirements:
 - At least 7GB of **free** RAM
 
 ### Modules
+- gateway-service - Uses Spring Cloud Gateway to act as a proxy/gateway in our architecture.
 - config-service: Uses Spring Cloud Config Server as a configuration server in the `native` mode. The configuration files are placed on the classpath.
 - discovery-service: Uses Spring Cloud Netflix Eureka as an embedded discovery server.
 - user-service: RESTful API for `User` records. Uses JPA for RDBMS persistence.
@@ -74,8 +77,6 @@ You can append `-x test` and/or omit `integrationTest` to skip unit and integrat
 1. Navigate to the project directory using a terminal and build the docker images:
 
     `./gradlew build docker`
-
-
 
 2. Start the docker compose network and containers ([preview](doc/img/start-apps.png)):
 

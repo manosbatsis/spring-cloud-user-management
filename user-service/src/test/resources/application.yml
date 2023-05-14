@@ -10,6 +10,7 @@ spring:
         username: root
         password: secret
     cloud:
+        config.import-check.enabled: false
         schema-registry-client:
             endpoint: http://${SCHEMA_REGISTRY_HOST:localhost}:${SCHEMA_REGISTRY_PORT:8081}
         stream:
@@ -41,11 +42,11 @@ management:
         probes:
             enabled: true
     tracing:
-        sampling:
-            probability: 1.0
-    zipkin:
-        tracing:
-            endpoint: http://${ZIPKIN_HOST:localhost}:${ZIPKIN_PORT:9411}/api/v2/spans
+        enabled: false
+
+eureka:
+    client:
+        enabled: false
 
 springdoc:
     show-actuator: true
@@ -75,30 +76,3 @@ logging:
     pattern:
         level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
 
----
-spring:
-    config:
-        activate:
-            on-profile: avro
-    cloud:
-        schema:
-            avro:
-                schema-locations:
-                    - classpath:avro/userevent-message.avsc
-        stream:
-            bindings:
-                users-out-0:
-                    content-type: application/*+avro
-
----
-spring:
-    config:
-        activate:
-            on-profile: test
-    jpa:
-        hibernate:
-            ddl-auto: create-drop
-
-management:
-    tracing:
-        enabled: false

@@ -120,6 +120,7 @@ public abstract class AbstractTestcontainers {
         emailServiceContainer
                 .withNetwork(network)
                 .withNetworkAliases("email-service")
+                .withEnv("SPRING_PROFILES_ACTIVE", "docker")
                 .withEnv("KAFKA_HOST", "kafka")
                 .withEnv("KAFKA_PORT", "9092")
                 .withEnv("EMAIL_HOST", "greenmail")
@@ -152,6 +153,7 @@ public abstract class AbstractTestcontainers {
         eventServiceContainer
                 .withNetwork(network)
                 .withNetworkAliases("event-service")
+                .withEnv("SPRING_PROFILES_ACTIVE", "docker")
                 .withEnv("KAFKA_HOST", "kafka")
                 .withEnv("KAFKA_PORT", "9092")
                 .withEnv("SCHEMA_REGISTRY_HOST", "schema-registry")
@@ -178,11 +180,18 @@ public abstract class AbstractTestcontainers {
         registry.add("spring.datasource.password", mySQLContainer::getPassword);
         registry.add("spring.jpa.properties.hibernate.dialect.storage_engine", () -> "innodb");
         registry.add("spring.jpa.hibernate.ddl-auto", () -> "create-drop");
-        String schemaRegistryEndpoint =
-                String.format("http://localhost:%s", schemaRegistryContainer.getMappedPort(8081));
-        registry.add("spring.cloud.schema-registry-client.endpoint", () -> schemaRegistryEndpoint);
         registry.add(
                 "spring.cloud.stream.kafka.binder.brokers", kafkaContainer::getBootstrapServers);
+        registry.add(
+                "spring.cloud.schema-registry-client.endpoint",
+                () -> "http://localhost:" + schemaRegistryContainer.getMappedPort(8081));
+        registry.add(
+                "eureka.client.serviceUrl.defaultZone",
+                () ->
+                        "http://localhost:"
+                                + discoveryServiceContainer.getMappedPort(
+                                        DISCOVERY_SERVICE_EXPOSED_PORT)
+                                + "/eureka/");
         // registry.add("spring.mail.host", greenMailContainer::getHost);
         // registry.add("spring.mail.port", greenMailContainer::getFirstMappedPort);
 

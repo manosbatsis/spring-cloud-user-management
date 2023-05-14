@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 @ExtendWith(SpringExtension.class)
 @Import(UserMapperImpl.class)
-@ActiveProfiles(profiles = "local")
+@ActiveProfiles(profiles = "test")
 class UserMapperTest {
 
     @Autowired private UserMapper userMapper;

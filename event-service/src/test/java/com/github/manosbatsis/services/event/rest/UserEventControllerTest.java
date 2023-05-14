@@ -33,7 +33,7 @@ import java.util.Date;
 
 @WebMvcTest(UserEventController.class)
 @Import(UserMapperImpl.class)
-@ActiveProfiles({"local"})
+@ActiveProfiles({"test"})
 class UserEventControllerTest {
 
     @Autowired private MockMvc mockMvc;

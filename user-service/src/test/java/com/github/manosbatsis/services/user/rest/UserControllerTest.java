@@ -41,7 +41,7 @@ import java.util.Collections;
 
 @WebMvcTest(UserController.class)
 @Import(UserMapperImpl.class)
-@ActiveProfiles(profiles = "local")
+@ActiveProfiles(profiles = "test")
 class UserControllerTest {
 
     @Autowired private MockMvc mockMvc;

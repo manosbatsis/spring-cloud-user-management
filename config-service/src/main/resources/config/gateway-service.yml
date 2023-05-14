@@ -2,9 +2,11 @@ server:
   port: 8060
 
 eureka:
-  client:
-    serviceUrl:
-        defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
+    client:
+        serviceUrl:
+            defaultZone: http://${DISCOVERY_SERVICE_HOST:discovery-service}:${DISCOVERY_SERVICE_PORT:8761}/eureka/
+    instance:
+        hostname: ${DISCOVERY_INSTANCE_HOST:event-service}
 
 logging:
     level:
@@ -33,7 +35,7 @@ spring:
             predicates:
                 - Path=/user/**
             filters:
-                - RewritePath=/userservice/(?<path>.*), /$\{path}
+                - RewritePath=/user/(?<path>.*), /$\{path}
           - id: event-service
             uri: lb://event-service
             predicates:

@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @ExtendWith(SpringExtension.class)
 @Import(UserMapperImpl.class)
-@ActiveProfiles({"local", "test"})
+@ActiveProfiles({"test"})
 class UserMapperTest {
 
     @Autowired private UserMapper userMapper;

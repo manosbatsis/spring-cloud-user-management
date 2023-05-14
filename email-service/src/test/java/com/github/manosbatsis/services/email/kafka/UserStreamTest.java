@@ -33,7 +33,7 @@ import java.util.UUID;
 
 /** This class has the same test as {@link UserStreamTest} using a different style */
 @Slf4j
-@ActiveProfiles({"local", "test"})
+@ActiveProfiles({"test"})
 @SpringBootTest
 @Import(TestChannelBinderConfiguration.class)
 class UserStreamTest {

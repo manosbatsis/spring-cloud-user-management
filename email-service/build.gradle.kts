@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.spring.cloud.schema.registry.client)
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.mapstruct.core)

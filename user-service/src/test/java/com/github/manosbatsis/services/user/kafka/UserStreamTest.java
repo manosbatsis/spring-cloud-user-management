@@ -31,7 +31,7 @@ import java.io.IOException;
             "spring.datasource.driver-class-name=org.h2.Driver"
         })
 @Import(TestChannelBinderConfiguration.class)
-@ActiveProfiles(profiles = "local")
+@ActiveProfiles(profiles = "test")
 class UserStreamTest {
 
     @Autowired private OutputDestination outputDestination;

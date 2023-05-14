@@ -57,6 +57,8 @@ dependencies {
     implementation(libs.spring.cloud.schema.registry.client)
     //implementation("org.springframework.cloud:spring-cloud-schema-registry-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
+
     implementation("org.springframework.cloud:spring-cloud-stream")
     //implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-streams")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
