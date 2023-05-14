@@ -13,17 +13,17 @@ import org.springframework.util.MimeType;
 @Configuration
 public class SchemaRegistryConfig {
 
-  @Bean
-  public SchemaRegistryClient schemaRegistryClient(
-      @Value("${spring.cloud.schema-registry-client.endpoint}") String endpoint) {
-    ConfluentSchemaRegistryClient client = new ConfluentSchemaRegistryClient();
-    client.setEndpoint(endpoint);
-    return client;
-  }
+    @Bean
+    public SchemaRegistryClient schemaRegistryClient(
+            @Value("${spring.cloud.schema-registry-client.endpoint}") String endpoint) {
+        ConfluentSchemaRegistryClient client = new ConfluentSchemaRegistryClient();
+        client.setEndpoint(endpoint);
+        return client;
+    }
 
-  @Bean
-  public MessageConverter avroSchemaMessageConverter() {
-    return new AvroSchemaMessageConverter(
-        MimeType.valueOf("application/*+avro"), new AvroSchemaServiceManagerImpl());
-  }
+    @Bean
+    public MessageConverter avroSchemaMessageConverter() {
+        return new AvroSchemaMessageConverter(
+                MimeType.valueOf("application/*+avro"), new AvroSchemaServiceManagerImpl());
+    }
 }

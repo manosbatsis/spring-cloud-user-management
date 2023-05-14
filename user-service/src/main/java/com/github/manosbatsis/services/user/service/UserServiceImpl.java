@@ -4,7 +4,9 @@ import com.github.manosbatsis.services.user.exception.UserEmailDuplicatedExcepti
 import com.github.manosbatsis.services.user.exception.UserNotFoundException;
 import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,14 +35,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User validateAndGetUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException());
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     }
 
     @Override
     public void validateUserExistsByEmail(String email) {
-        userRepository.findUserByEmail(email).ifPresent(user -> {
-            throw new UserEmailDuplicatedException(String.format("User with email '%s' already exist.", email));
-        });
+        userRepository
+                .findUserByEmail(email)
+                .ifPresent(
+                        user -> {
+                            throw new UserEmailDuplicatedException(
+                                    String.format("User with email '%s' already exist.", email));
+                        });
     }
 }

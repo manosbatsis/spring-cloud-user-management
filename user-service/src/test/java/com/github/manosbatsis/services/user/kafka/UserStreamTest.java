@@ -1,10 +1,13 @@
 package com.github.manosbatsis.services.user.kafka;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.manosbatsis.lib.test.Constants;
 import com.github.manosbatsis.services.user.messages.UserEventMessage;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,29 +22,26 @@ import org.springframework.test.context.junit.jupiter.DisabledIf;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DisabledIf("#{environment.acceptsProfiles('avro')}")
-@SpringBootTest(properties = {
-        "spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=sa",
-        "spring.datasource.driver-class-name=org.h2.Driver"
-})
+@SpringBootTest(
+        properties = {
+            "spring.datasource.url=jdbc:h2:mem:db;DB_CLOSE_DELAY=-1",
+            "spring.datasource.username=sa",
+            "spring.datasource.password=sa",
+            "spring.datasource.driver-class-name=org.h2.Driver"
+        })
 @Import(TestChannelBinderConfiguration.class)
 @ActiveProfiles(profiles = "local")
 class UserStreamTest {
 
-    @Autowired
-    private OutputDestination outputDestination;
-    @Autowired
-    private UserStream userStream;
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private OutputDestination outputDestination;
+    @Autowired private UserStream userStream;
+    @Autowired private ObjectMapper objectMapper;
 
     @Test
     void testUserCreated() throws IOException {
-        CreateUserRequest createUserRequest = new CreateUserRequest("email@test", "fullName", "address", true);
+        CreateUserRequest createUserRequest =
+                new CreateUserRequest("email@test", "fullName", "address", true);
 
         Message<UserEventMessage> message = userStream.userCreated(1L, createUserRequest);
 
@@ -49,17 +49,14 @@ class UserStreamTest {
         assertThat(outputMessage).isNotNull();
         assertThat(outputMessage.getHeaders().get(MessageHeaders.CONTENT_TYPE))
                 .isEqualTo(MediaType.APPLICATION_JSON_VALUE);
-        UserEventMessage userEventMessage = objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
+        UserEventMessage userEventMessage =
+                objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
         assertThat(userEventMessage).isEqualTo(message.getPayload());
     }
 
     @Test
     void testUserUpdated() throws IOException {
-        UpdateUserRequest updateUserRequest = new UpdateUserRequest(
-            null,
-            "address",
-            false
-        );
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest(null, "address", false);
 
         Message<UserEventMessage> message = userStream.userUpdated(1L, updateUserRequest);
 
@@ -67,7 +64,8 @@ class UserStreamTest {
         assertThat(outputMessage).isNotNull();
         assertThat(outputMessage.getHeaders().get(MessageHeaders.CONTENT_TYPE))
                 .isEqualTo(MediaType.APPLICATION_JSON_VALUE);
-        UserEventMessage userEventMessage = objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
+        UserEventMessage userEventMessage =
+                objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
         assertThat(userEventMessage).isEqualTo(message.getPayload());
     }
 
@@ -80,8 +78,8 @@ class UserStreamTest {
         assertThat(outputMessage).isNotNull();
         assertThat(outputMessage.getHeaders().get(MessageHeaders.CONTENT_TYPE))
                 .isEqualTo(MediaType.APPLICATION_JSON_VALUE);
-        UserEventMessage userEventMessage = objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
+        UserEventMessage userEventMessage =
+                objectMapper.readValue(outputMessage.getPayload(), UserEventMessage.class);
         assertThat(userEventMessage).isEqualTo(message.getPayload());
     }
-
 }

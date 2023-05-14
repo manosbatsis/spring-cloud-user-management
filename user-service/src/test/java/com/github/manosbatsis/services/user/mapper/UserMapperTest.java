@@ -1,10 +1,13 @@
 package com.github.manosbatsis.services.user.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javafaker.Faker;
 import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UserResponse;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,26 +20,23 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @ExtendWith(SpringExtension.class)
 @Import(UserMapperImpl.class)
 @ActiveProfiles(profiles = "local")
 class UserMapperTest {
 
-    @Autowired
-    private UserMapper userMapper;
+    @Autowired private UserMapper userMapper;
 
     private Faker faker = new Faker();
 
     @Test
     void testToUser() {
-        CreateUserRequest createUserRequest = new CreateUserRequest(
-            faker.internet().emailAddress(),
-            faker.name().fullName(),
-            faker.address().fullAddress(),
-            true
-        );
+        CreateUserRequest createUserRequest =
+                new CreateUserRequest(
+                        faker.internet().emailAddress(),
+                        faker.name().fullName(),
+                        faker.address().fullAddress(),
+                        true);
 
         User user = userMapper.toUser(createUserRequest);
 
@@ -50,12 +50,12 @@ class UserMapperTest {
 
     @Test
     void testToUserResponse() {
-        User user = new User(
-            faker.internet().emailAddress(),
-            faker.name().fullName(),
-            faker.address().fullAddress(),
-            true
-        );
+        User user =
+                new User(
+                        faker.internet().emailAddress(),
+                        faker.name().fullName(),
+                        faker.address().fullAddress(),
+                        true);
 
         UserResponse userResponse = userMapper.toUserResponse(user);
 
@@ -73,10 +73,8 @@ class UserMapperTest {
 
         User user = new User("email@test", "fullName", "address", true);
 
-        UpdateUserRequest updateUserRequest = UpdateUserRequest.builder()
-            .fullName(newFullName)
-            .active(newActive)
-            .build();
+        UpdateUserRequest updateUserRequest =
+                UpdateUserRequest.builder().fullName(newFullName).active(newActive).build();
 
         userMapper.updateUserFromRequest(updateUserRequest, user);
         assertThat(user).isEqualTo(expectedUser);
@@ -85,11 +83,12 @@ class UserMapperTest {
     private static Stream<Arguments> provideUpdateUserFromRequest() {
 
         return Stream.of(
-                Arguments.of("fullName2", false, new User("email@test", "fullName2", "address", false)),
+                Arguments.of(
+                        "fullName2", false, new User("email@test", "fullName2", "address", false)),
                 Arguments.of(null, null, new User("email@test", "fullName", "address", true)),
-                Arguments.of("fullName2", null, new User("email@test", "fullName2", "address", true)),
+                Arguments.of(
+                        "fullName2", null, new User("email@test", "fullName2", "address", true)),
                 Arguments.of(null, false, new User("email@test", "fullName", "address", false)),
-                Arguments.of(null, null, new User("email@test", "fullName", "address", true))
-        );
+                Arguments.of(null, null, new User("email@test", "fullName", "address", true)));
     }
 }

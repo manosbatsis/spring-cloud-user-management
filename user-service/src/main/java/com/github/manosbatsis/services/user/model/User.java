@@ -1,9 +1,12 @@
 package com.github.manosbatsis.services.user.model;
 
 import com.github.manosbatsis.services.user.kafka.UserEntityListener;
+
 import jakarta.persistence.*;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -59,5 +62,4 @@ public class User {
     public void onPreUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
 }

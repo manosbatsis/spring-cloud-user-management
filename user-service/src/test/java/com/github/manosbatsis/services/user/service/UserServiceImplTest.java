@@ -1,10 +1,20 @@
 package com.github.manosbatsis.services.user.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.willDoNothing;
+
 import com.github.javafaker.Faker;
 import com.github.manosbatsis.services.user.exception.UserEmailDuplicatedException;
 import com.github.manosbatsis.services.user.exception.UserNotFoundException;
 import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.repository.UserRepository;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,24 +26,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willDoNothing;
-
 @ExtendWith(SpringExtension.class)
 @Import(UserServiceImpl.class)
 class UserServiceImplTest {
 
-    @Autowired
-    private UserService userService;
+    @Autowired private UserService userService;
 
-    @MockBean
-    private UserRepository userRepository;
+    @MockBean private UserRepository userRepository;
 
     private Faker faker = new Faker();
 
@@ -120,6 +119,10 @@ class UserServiceImplTest {
     }
 
     private User getDefaultUser() {
-        return new User(faker.internet().emailAddress(), faker.name().fullName(), faker.address().fullAddress(), true);
+        return new User(
+                faker.internet().emailAddress(),
+                faker.name().fullName(),
+                faker.address().fullAddress(),
+                true);
     }
 }

@@ -1,5 +1,8 @@
 package com.github.manosbatsis.services.user;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
+
 import com.github.javafaker.Faker;
 import com.github.manosbatsis.lib.test.error.ErrorResponse;
 import com.github.manosbatsis.services.user.model.User;
@@ -7,7 +10,9 @@ import com.github.manosbatsis.services.user.repository.UserRepository;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UserResponse;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +29,14 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
-
 @Slf4j
 @ActiveProfiles({"docker"})
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 class UserServiceApplicationTest extends AbstractTestcontainers {
 
-    @Autowired
-    private TestRestTemplate testRestTemplate;
+    @Autowired private TestRestTemplate testRestTemplate;
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     private Faker faker = new Faker();
 
@@ -47,7 +47,8 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
 
     @Test
     void testGetUsersWhenThereIsNone() {
-        ResponseEntity<UserResponse[]> responseEntity = testRestTemplate.getForEntity(API_USERS_URL, UserResponse[].class);
+        ResponseEntity<UserResponse[]> responseEntity =
+                testRestTemplate.getForEntity(API_USERS_URL, UserResponse[].class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -58,7 +59,8 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
     void testGetUsersWhenThereIsOne() {
         User user = userRepository.save(getDefaultUser());
 
-        ResponseEntity<UserResponse[]> responseEntity = testRestTemplate.getForEntity(API_USERS_URL, UserResponse[].class);
+        ResponseEntity<UserResponse[]> responseEntity =
+                testRestTemplate.getForEntity(API_USERS_URL, UserResponse[].class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -72,7 +74,8 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
     void testGetUserWhenNonExistent() {
         Long id = 999L;
         String url = String.format(API_USERS_USER_ID_URL, id);
-        ResponseEntity<ErrorResponse> responseEntity = testRestTemplate.getForEntity(url, ErrorResponse.class);
+        ResponseEntity<ErrorResponse> responseEntity =
+                testRestTemplate.getForEntity(url, ErrorResponse.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -84,7 +87,8 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
         User user = userRepository.save(getDefaultUser());
 
         String url = String.format(API_USERS_USER_ID_URL, user.getId());
-        ResponseEntity<UserResponse> responseEntity = testRestTemplate.getForEntity(url, UserResponse.class);
+        ResponseEntity<UserResponse> responseEntity =
+                testRestTemplate.getForEntity(url, UserResponse.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -97,7 +101,9 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
     @Test
     void testCreateUser() {
         CreateUserRequest createUserRequest = getDefaultCreateUserRequest();
-        ResponseEntity<UserResponse> responseEntity = testRestTemplate.postForEntity(API_USERS_URL, createUserRequest, UserResponse.class);
+        ResponseEntity<UserResponse> responseEntity =
+                testRestTemplate.postForEntity(
+                        API_USERS_URL, createUserRequest, UserResponse.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -110,16 +116,32 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
         Optional<User> userFound = userRepository.findById(userId);
         assertThat(userFound).isPresent();
 
-        await().atMost(AT_MOST_DURATION).pollInterval(POLL_INTERVAL_DURATION).untilAsserted(() -> {
-            log.info("Waiting for event-service to receive the message and process ...");
-            String eventServiceUrl = String.format("%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
-            ResponseEntity<EventServiceUserEventResponse[]> eventServiceResponseEntity =
-                testRestTemplate.getForEntity(eventServiceUrl, EventServiceUserEventResponse[].class);
-            assertThat(eventServiceResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
-            assertThat(Arrays.stream(eventServiceResponseEntity.getBody())
-                .anyMatch(userEventResponse -> userEventResponse.type().equals("CREATED"))).isTrue();
-        });
+        await().atMost(AT_MOST_DURATION)
+                .pollInterval(POLL_INTERVAL_DURATION)
+                .untilAsserted(
+                        () -> {
+                            log.info(
+                                    "Waiting for event-service to receive the message and process ...");
+                            String eventServiceUrl =
+                                    String.format(
+                                            "%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
+                            ResponseEntity<EventServiceUserEventResponse[]>
+                                    eventServiceResponseEntity =
+                                            testRestTemplate.getForEntity(
+                                                    eventServiceUrl,
+                                                    EventServiceUserEventResponse[].class);
+                            assertThat(eventServiceResponseEntity.getStatusCode())
+                                    .isEqualTo(HttpStatus.OK);
+                            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
+                            assertThat(
+                                            Arrays.stream(eventServiceResponseEntity.getBody())
+                                                    .anyMatch(
+                                                            userEventResponse ->
+                                                                    userEventResponse
+                                                                            .type()
+                                                                            .equals("CREATED")))
+                                    .isTrue();
+                        });
     }
 
     @Test
@@ -132,7 +154,8 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
 
         HttpEntity<UpdateUserRequest> requestUpdate = new HttpEntity<>(updateUserRequest);
         String url = String.format(API_USERS_USER_ID_URL, userId);
-        ResponseEntity<UserResponse> responseEntity = testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, UserResponse.class);
+        ResponseEntity<UserResponse> responseEntity =
+                testRestTemplate.exchange(url, HttpMethod.PUT, requestUpdate, UserResponse.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -141,24 +164,42 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
         assertThat(responseEntity.getBody().fullName()).isEqualTo(user.getFullName());
         assertThat(responseEntity.getBody().active()).isEqualTo(updateUserRequest.getActive());
 
-        await().atMost(AT_MOST_DURATION).pollInterval(POLL_INTERVAL_DURATION).untilAsserted(() -> {
-            log.info("Waiting for event-service to receive the message and process ...");
-            String eventServiceUrl = String.format("%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
-            ResponseEntity<EventServiceUserEventResponse[]> eventServiceResponseEntity =
-                testRestTemplate.getForEntity(eventServiceUrl, EventServiceUserEventResponse[].class);
-            assertThat(eventServiceResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
-            assertThat(Arrays.stream(eventServiceResponseEntity.getBody())
-                .anyMatch(userEventResponse -> userEventResponse.type().equals("UPDATED"))).isTrue();
-        });
+        await().atMost(AT_MOST_DURATION)
+                .pollInterval(POLL_INTERVAL_DURATION)
+                .untilAsserted(
+                        () -> {
+                            log.info(
+                                    "Waiting for event-service to receive the message and process ...");
+                            String eventServiceUrl =
+                                    String.format(
+                                            "%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
+                            ResponseEntity<EventServiceUserEventResponse[]>
+                                    eventServiceResponseEntity =
+                                            testRestTemplate.getForEntity(
+                                                    eventServiceUrl,
+                                                    EventServiceUserEventResponse[].class);
+                            assertThat(eventServiceResponseEntity.getStatusCode())
+                                    .isEqualTo(HttpStatus.OK);
+                            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
+                            assertThat(
+                                            Arrays.stream(eventServiceResponseEntity.getBody())
+                                                    .anyMatch(
+                                                            userEventResponse ->
+                                                                    userEventResponse
+                                                                            .type()
+                                                                            .equals("UPDATED")))
+                                    .isTrue();
+                        });
     }
+
     @Test
     void testDeleteUser() {
         User user = userRepository.save(getDefaultUser());
         Long userId = user.getId();
 
         String url = String.format(API_USERS_USER_ID_URL, userId);
-        ResponseEntity<UserResponse> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, null, UserResponse.class);
+        ResponseEntity<UserResponse> responseEntity =
+                testRestTemplate.exchange(url, HttpMethod.DELETE, null, UserResponse.class);
 
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isNotNull();
@@ -170,36 +211,52 @@ class UserServiceApplicationTest extends AbstractTestcontainers {
         Optional<User> userNotFound = userRepository.findById(userId);
         assertThat(userNotFound).isNotPresent();
 
-        await().atMost(AT_MOST_DURATION).pollInterval(POLL_INTERVAL_DURATION).untilAsserted(() -> {
-            log.info("Waiting for event-service to receive the message and process ...");
-            String eventServiceUrl = String.format("%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
-            ResponseEntity<EventServiceUserEventResponse[]> eventServiceResponseEntity =
-                testRestTemplate.getForEntity(eventServiceUrl, EventServiceUserEventResponse[].class);
-            assertThat(eventServiceResponseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
-            assertThat(Arrays.stream(eventServiceResponseEntity.getBody())
-                .anyMatch(userEventResponse -> userEventResponse.type().equals("DELETED"))).isTrue();
-        });
+        await().atMost(AT_MOST_DURATION)
+                .pollInterval(POLL_INTERVAL_DURATION)
+                .untilAsserted(
+                        () -> {
+                            log.info(
+                                    "Waiting for event-service to receive the message and process ...");
+                            String eventServiceUrl =
+                                    String.format(
+                                            "%s/events?userId=%s", EVENT_SERVICE_API_URL, userId);
+                            ResponseEntity<EventServiceUserEventResponse[]>
+                                    eventServiceResponseEntity =
+                                            testRestTemplate.getForEntity(
+                                                    eventServiceUrl,
+                                                    EventServiceUserEventResponse[].class);
+                            assertThat(eventServiceResponseEntity.getStatusCode())
+                                    .isEqualTo(HttpStatus.OK);
+                            assertThat(eventServiceResponseEntity.getBody()).isNotNull();
+                            assertThat(
+                                            Arrays.stream(eventServiceResponseEntity.getBody())
+                                                    .anyMatch(
+                                                            userEventResponse ->
+                                                                    userEventResponse
+                                                                            .type()
+                                                                            .equals("DELETED")))
+                                    .isTrue();
+                        });
     }
 
     private User getDefaultUser() {
         return new User(
-            faker.internet().emailAddress(),
-            faker.name().fullName(),
-            faker.address().fullAddress(),
-            true);
+                faker.internet().emailAddress(),
+                faker.name().fullName(),
+                faker.address().fullAddress(),
+                true);
     }
 
     private CreateUserRequest getDefaultCreateUserRequest() {
         return new CreateUserRequest(
-            faker.internet().emailAddress(),
-            faker.name().fullName(),
-            faker.address().fullAddress(),
-            true);
+                faker.internet().emailAddress(),
+                faker.name().fullName(),
+                faker.address().fullAddress(),
+                true);
     }
 
-    private record EventServiceUserEventResponse(Long userId, String datetime, String type, String data) {
-    }
+    private record EventServiceUserEventResponse(
+            Long userId, String datetime, String type, String data) {}
 
     private static final String API_USERS_URL = "/api/users";
     private static final String API_USERS_USER_ID_URL = "/api/users/%s";

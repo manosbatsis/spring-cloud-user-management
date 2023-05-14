@@ -1,6 +1,7 @@
 package com.github.manosbatsis.services.user.validation.validator;
 
 import com.github.manosbatsis.services.user.validation.NullOrNotBlank;
+
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

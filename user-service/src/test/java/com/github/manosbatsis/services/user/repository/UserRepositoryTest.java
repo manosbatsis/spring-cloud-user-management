@@ -1,7 +1,10 @@
 package com.github.manosbatsis.services.user.repository;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.github.javafaker.Faker;
 import com.github.manosbatsis.services.user.model.User;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -9,19 +12,17 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 class UserRepositoryTest {
 
-    @Autowired
-    private UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     private Faker faker = new Faker();
 
     @Test
     void testFindUserByEmailWhenThereNone() {
-        Optional<User> userOptional = userRepository.findUserByEmail("email@" + UUID.randomUUID() + ".com");
+        Optional<User> userOptional =
+                userRepository.findUserByEmail("email@" + UUID.randomUUID() + ".com");
 
         assertThat(userOptional).isNotNull();
         assertThat(userOptional.isPresent()).isFalse();
@@ -29,11 +30,12 @@ class UserRepositoryTest {
 
     @Test
     void testFindUserByEmailWhenThereIsOne() {
-        User user = new User(
-            faker.internet().emailAddress(),
-            faker.name().fullName(),
-            faker.address().fullAddress(),
-            true);
+        User user =
+                new User(
+                        faker.internet().emailAddress(),
+                        faker.name().fullName(),
+                        faker.address().fullAddress(),
+                        true);
         userRepository.save(user);
 
         Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());

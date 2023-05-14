@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @Data
 public class EmailRecepient {
 
-  private String email;
+    private String email;
 
-  private String fullName;
+    private String fullName;
 
-  private String address;
+    private String address;
 
-  public EmailRecepient(String email, String fullName, String address) {
-    this.email = email;
-    this.fullName = fullName;
-    this.address = address;
-  }
+    public EmailRecepient(String email, String fullName, String address) {
+        this.email = email;
+        this.fullName = fullName;
+        this.address = address;
+    }
 }

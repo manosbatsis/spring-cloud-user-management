@@ -6,9 +6,12 @@ import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UserResponse;
 import com.github.manosbatsis.services.user.service.UserService;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,8 +37,7 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getUsers() {
-        return userService.getUsers()
-                .stream()
+        return userService.getUsers().stream()
                 .map(userMapper::toUserResponse)
                 .collect(Collectors.toList());
     }
@@ -56,7 +58,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserResponse updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
+    public UserResponse updateUser(
+            @PathVariable Long id, @Valid @RequestBody UpdateUserRequest updateUserRequest) {
         User user = userService.validateAndGetUserById(id);
         userMapper.updateUserFromRequest(updateUserRequest, user);
         user = userService.saveUser(user);

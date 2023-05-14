@@ -1,7 +1,9 @@
 package com.github.manosbatsis.services.user.rest.dto;
 
 import com.github.manosbatsis.services.user.validation.NullOrNotBlank;
+
 import io.swagger.v3.oas.annotations.media.Schema;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -78,11 +78,8 @@ subprojects {
                 // licenseHeaderFile(rootProject.projectDir.resolve("etc/source-header/header.txt"))
             }
             java {
-                target(project.fileTree("src/java") {
-                    include("**/*.java")
-                    exclude("build/**/*.*")
-                })
-                googleJavaFormat()
+                target("src/**/*.java")
+                googleJavaFormat().aosp()
                 // optional: you can specify a specific version (>= 1.8) and/or switch to AOSP style
                 //   and/or reflow long strings
                 //   and/or use custom group artifact (you probably don't need this)

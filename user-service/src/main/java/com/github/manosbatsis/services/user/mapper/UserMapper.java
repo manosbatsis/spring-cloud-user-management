@@ -4,6 +4,7 @@ import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UserResponse;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -13,8 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @Mapper(
         componentModel = "spring",
-        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE
-)
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)

@@ -11,8 +11,9 @@ public class SpringContext implements ApplicationContextAware {
     private static ApplicationContext context;
 
     /**
-     * Returns the Spring managed bean instance of the given class type if it exists.
-     * Returns null otherwise.
+     * Returns the Spring managed bean instance of the given class type if it exists. Returns null
+     * otherwise.
+     *
      * @param beanClass
      * @return
      */
@@ -27,8 +28,8 @@ public class SpringContext implements ApplicationContextAware {
     }
 
     /**
-     * Private method context setting (better practice for setting a static field in a bean
-     * instance - see comments of this article for more info).
+     * Private method context setting (better practice for setting a static field in a bean instance
+     * - see comments of this article for more info).
      */
     private static synchronized void setContext(ApplicationContext context) {
         SpringContext.context = context;

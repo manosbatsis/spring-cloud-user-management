@@ -10,13 +10,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.github.manosbatsis.lib.test.MyLocalDateHandler;
 import com.github.manosbatsis.services.event.mapper.UserMapperImpl;
 import com.github.manosbatsis.services.event.model.UserEvent;
 import com.github.manosbatsis.services.event.model.UserEventKey;
 import com.github.manosbatsis.services.event.service.UserEventService;
-import com.github.manosbatsis.lib.test.MyLocalDateHandler;
-import java.util.Collections;
-import java.util.Date;
 
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -30,46 +28,52 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.Collections;
+import java.util.Date;
+
 @WebMvcTest(UserEventController.class)
 @Import(UserMapperImpl.class)
 @ActiveProfiles({"local"})
 class UserEventControllerTest {
 
-  @Autowired private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-  @MockBean private UserEventService userEventService;
+    @MockBean private UserEventService userEventService;
 
-  @Test
-  void testGetUserEventsWhenThereIsNone() throws Exception {
-    given(userEventService.getUserEvents(anyLong())).willReturn(Collections.emptyList());
+    @Test
+    void testGetUserEventsWhenThereIsNone() throws Exception {
+        given(userEventService.getUserEvents(anyLong())).willReturn(Collections.emptyList());
 
-    ResultActions resultActions = mockMvc.perform(get("/api/events?userId=1")).andDo(print());
+        ResultActions resultActions = mockMvc.perform(get("/api/events?userId=1")).andDo(print());
 
-    resultActions
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(0)));
-  }
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(0)));
+    }
 
-  @Test
-  void testGetUserEventsWhenThereIsOne() throws Exception {
-    UserEvent userEvent = new UserEvent(new UserEventKey(1L, new Date()), "type", "data");
+    @Test
+    void testGetUserEventsWhenThereIsOne() throws Exception {
+        UserEvent userEvent = new UserEvent(new UserEventKey(1L, new Date()), "type", "data");
 
-    given(userEventService.getUserEvents(anyLong()))
-        .willReturn(Collections.singletonList(userEvent));
+        given(userEventService.getUserEvents(anyLong()))
+                .willReturn(Collections.singletonList(userEvent));
 
-    ResultActions resultActions = mockMvc.perform(get("/api/events?userId=" + 1)).andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(get("/api/events?userId=" + 1)).andDo(print());
 
-    resultActions
-        .andExpect(status().isOk())
-        .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$", hasSize(1)))
-        .andExpect(jsonPath("$[0].userId", is(userEvent.getKey().getUserId().intValue())))
-        .andExpect(
-            MockMvcResultMatchers.jsonPath(
-                "$[0].datetime",
-                Matchers.is(MyLocalDateHandler.fromDateToString(userEvent.getKey().getDatetime()))))
-        .andExpect(jsonPath("$[0].data", is(userEvent.getData())))
-        .andExpect(jsonPath("$[0].type", is(userEvent.getType())));
-  }
+        resultActions
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].userId", is(userEvent.getKey().getUserId().intValue())))
+                .andExpect(
+                        MockMvcResultMatchers.jsonPath(
+                                "$[0].datetime",
+                                Matchers.is(
+                                        MyLocalDateHandler.fromDateToString(
+                                                userEvent.getKey().getDatetime()))))
+                .andExpect(jsonPath("$[0].data", is(userEvent.getData())))
+                .andExpect(jsonPath("$[0].type", is(userEvent.getType())));
+    }
 }

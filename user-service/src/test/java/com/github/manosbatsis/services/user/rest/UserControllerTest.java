@@ -1,15 +1,31 @@
 package com.github.manosbatsis.services.user.rest;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import com.github.manosbatsis.services.user.exception.UserEmailDuplicatedException;
 import com.github.manosbatsis.services.user.exception.UserNotFoundException;
 import com.github.manosbatsis.services.user.kafka.UserStream;
+import com.github.manosbatsis.services.user.mapper.UserMapperImpl;
 import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
 import com.github.manosbatsis.services.user.service.UserService;
-import com.github.manosbatsis.services.user.mapper.UserMapperImpl;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,38 +39,18 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Collections;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(UserController.class)
 @Import(UserMapperImpl.class)
 @ActiveProfiles(profiles = "local")
 class UserControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private ObjectMapper objectMapper;
 
-    @MockBean
-    private UserService userService;
+    @MockBean private UserService userService;
 
-    @MockBean
-    private UserStream userStream;
+    @MockBean private UserStream userStream;
 
     private Faker faker = new Faker();
 
@@ -62,10 +58,10 @@ class UserControllerTest {
     void testGetUsersWhenThereIsNone() throws Exception {
         given(userService.getUsers()).willReturn(Collections.emptyList());
 
-        ResultActions resultActions = mockMvc.perform(get(API_USERS_URL))
-                .andDo(print());
+        ResultActions resultActions = mockMvc.perform(get(API_USERS_URL)).andDo(print());
 
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$, hasSize(0)));
     }
@@ -75,10 +71,10 @@ class UserControllerTest {
         User user = getDefaultUser();
         given(userService.getUsers()).willReturn(Collections.singletonList(user));
 
-        ResultActions resultActions = mockMvc.perform(get(API_USERS_URL))
-                .andDo(print());
+        ResultActions resultActions = mockMvc.perform(get(API_USERS_URL)).andDo(print());
 
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$, hasSize(1)))
                 .andExpect(jsonPath(JSON_$_0_ID, is(user.getId().intValue())))
@@ -91,8 +87,7 @@ class UserControllerTest {
     void testGetUserByIdWhenNonExistent() throws Exception {
         given(userService.validateAndGetUserById(anyLong())).willThrow(UserNotFoundException.class);
 
-        ResultActions resultActions = mockMvc.perform(get(API_USERS_ID_URL, 1))
-                .andDo(print());
+        ResultActions resultActions = mockMvc.perform(get(API_USERS_ID_URL, 1)).andDo(print());
 
         resultActions.andExpect(status().isNotFound());
     }
@@ -102,10 +97,10 @@ class UserControllerTest {
         User user = getDefaultUser();
         given(userService.validateAndGetUserById(anyLong())).willReturn(user);
 
-        ResultActions resultActions = mockMvc.perform(get(API_USERS_ID_URL, 1))
-                .andDo(print());
+        ResultActions resultActions = mockMvc.perform(get(API_USERS_ID_URL, 1)).andDo(print());
 
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$_ID, is(user.getId().intValue())))
                 .andExpect(jsonPath(JSON_$_EMAIL, is(user.getEmail())))
@@ -119,12 +114,16 @@ class UserControllerTest {
         given(userService.saveUser(any(User.class))).willReturn(user);
 
         CreateUserRequest createUserRequest = getDefaultCreateUserRequest();
-        ResultActions resultActions = mockMvc.perform(post(API_USERS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createUserRequest)))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(
+                                post(API_USERS_URL)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(createUserRequest)))
+                        .andDo(print());
 
-        resultActions.andExpect(status().isCreated())
+        resultActions
+                .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$_ID, is(user.getId().intValue())))
                 .andExpect(jsonPath(JSON_$_EMAIL, is(user.getEmail())))
@@ -134,22 +133,32 @@ class UserControllerTest {
 
     @Test
     void testCreateUserInformingInvalidInput() throws Exception {
-        ResultActions resultActions = mockMvc.perform(post(API_USERS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new CreateUserRequest())))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(
+                                post(API_USERS_URL)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(
+                                                        new CreateUserRequest())))
+                        .andDo(print());
 
         resultActions.andExpect(status().isBadRequest());
     }
 
     @Test
     void testCreateUserWhenThereIsDuplicatedEmail() throws Exception {
-        BDDMockito.willThrow(UserEmailDuplicatedException.class).given(userService).validateUserExistsByEmail(anyString());
+        BDDMockito.willThrow(UserEmailDuplicatedException.class)
+                .given(userService)
+                .validateUserExistsByEmail(anyString());
 
-        ResultActions resultActions = mockMvc.perform(post(API_USERS_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(getDefaultCreateUserRequest())))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(
+                                post(API_USERS_URL)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(
+                                                        getDefaultCreateUserRequest())))
+                        .andDo(print());
 
         resultActions.andExpect(status().isConflict());
     }
@@ -160,18 +169,18 @@ class UserControllerTest {
         given(userService.validateAndGetUserById(anyLong())).willReturn(user);
         given(userService.saveUser(any(User.class))).willReturn(user);
 
-        UpdateUserRequest updateUserRequest = new UpdateUserRequest(
-            "fullName2",
-            "address2",
-            false
-        );
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest("fullName2", "address2", false);
 
-        ResultActions resultActions = mockMvc.perform(put(API_USERS_ID_URL, user.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(updateUserRequest)))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(
+                                put(API_USERS_ID_URL, user.getId())
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(updateUserRequest)))
+                        .andDo(print());
 
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$_ID, is(user.getId().intValue())))
                 .andExpect(jsonPath(JSON_$_ADDRESS, is(updateUserRequest.getAddress())))
@@ -183,14 +192,17 @@ class UserControllerTest {
     void testUpdateUserWhenNonExistent() throws Exception {
         given(userService.validateAndGetUserById(anyLong())).willThrow(UserNotFoundException.class);
 
-        ResultActions resultActions = mockMvc.perform(put(API_USERS_ID_URL, 1)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new UpdateUserRequest(
-                            faker.name().fullName(),
-                            faker.address().fullAddress(),
-                            true
-                        ))))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(
+                                put(API_USERS_ID_URL, 1)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(
+                                                objectMapper.writeValueAsString(
+                                                        new UpdateUserRequest(
+                                                                faker.name().fullName(),
+                                                                faker.address().fullAddress(),
+                                                                true))))
+                        .andDo(print());
 
         resultActions.andExpect(status().isNotFound());
     }
@@ -200,10 +212,11 @@ class UserControllerTest {
         User user = getDefaultUser();
         given(userService.validateAndGetUserById(anyLong())).willReturn(user);
 
-        ResultActions resultActions = mockMvc.perform(delete(API_USERS_ID_URL, user.getId()))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(delete(API_USERS_ID_URL, user.getId())).andDo(print());
 
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath(JSON_$_ID, is(user.getId().intValue())))
                 .andExpect(jsonPath(JSON_$_EMAIL, is(user.getEmail())))
@@ -216,8 +229,8 @@ class UserControllerTest {
         User user = getDefaultUser();
         given(userService.validateAndGetUserById(anyLong())).willThrow(UserNotFoundException.class);
 
-        ResultActions resultActions = mockMvc.perform(delete(API_USERS_ID_URL, user.getId()))
-                .andDo(print());
+        ResultActions resultActions =
+                mockMvc.perform(delete(API_USERS_ID_URL, user.getId())).andDo(print());
 
         resultActions.andExpect(status().isNotFound());
     }

@@ -8,7 +8,9 @@ import com.github.manosbatsis.services.user.messages.UserEventMessage;
 import com.github.manosbatsis.services.user.model.User;
 import com.github.manosbatsis.services.user.rest.dto.CreateUserRequest;
 import com.github.manosbatsis.services.user.rest.dto.UpdateUserRequest;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.function.StreamBridge;
@@ -23,10 +25,8 @@ import java.util.UUID;
 @Component
 public class UserStream {
 
-    @Autowired
-    private StreamBridge streamBridge;
-    @Autowired
-    private ObjectMapper objectMapper;
+    @Autowired private StreamBridge streamBridge;
+    @Autowired private ObjectMapper objectMapper;
 
     @Value("${spring.cloud.stream.bindings.users-out-0.content-type:application/json}")
     private String streamOutMimeType;
@@ -52,27 +52,28 @@ public class UserStream {
     }
 
     private Message<UserEventMessage> sendToBus(Long userId, EventType eventType, String json) {
-        UserEventMessage userEventMessage = new UserEventMessage(
-            UUID.randomUUID().toString(),
-            System.currentTimeMillis(),
-            eventType,
-            userId,
-            json
-        );
+        UserEventMessage userEventMessage =
+                new UserEventMessage(
+                        UUID.randomUUID().toString(),
+                        System.currentTimeMillis(),
+                        eventType,
+                        userId,
+                        json);
 
         return sendToBus(userId, userEventMessage);
     }
 
-    private Message<UserEventMessage> sendToBus(Long partitionKey, UserEventMessage userEventMessage) {
-        Message<UserEventMessage> message = MessageBuilder.withPayload(userEventMessage)
-            .setHeader("partitionKey", partitionKey)
-            .setHeader("target-protocol", "kafka")
-            .build();
+    private Message<UserEventMessage> sendToBus(
+            Long partitionKey, UserEventMessage userEventMessage) {
+        Message<UserEventMessage> message =
+                MessageBuilder.withPayload(userEventMessage)
+                        .setHeader("partitionKey", partitionKey)
+                        .setHeader("target-protocol", "kafka")
+                        .build();
 
         streamBridge.send("users-topic", message, MimeType.valueOf(streamOutMimeType));
         return message;
     }
-
 
     private String writeValueAsString(Object object) {
         try {

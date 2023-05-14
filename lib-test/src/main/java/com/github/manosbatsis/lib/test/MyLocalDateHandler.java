@@ -12,8 +12,7 @@ public class MyLocalDateHandler {
     private static final String ZONE_ID = "UTC";
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern(PATTERN);
 
-    private MyLocalDateHandler() {
-    }
+    private MyLocalDateHandler() {}
 
     public static Date fromStringToDate(String string) {
         LocalDateTime ldt = LocalDateTime.parse(string, DTF);
