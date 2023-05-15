@@ -26,7 +26,7 @@ tasks.register<RunNpm>("start") {
     description = "Runs this web application in development mode."
     dependsOn("installNode", "installYarn", "installFrontend")
 
-    script.set("start")
+    script.set("run dev")
 }
 
 tasks.named<CleanTask>("cleanFrontend") {
