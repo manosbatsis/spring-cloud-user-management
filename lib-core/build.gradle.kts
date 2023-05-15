@@ -23,6 +23,6 @@ dependencies {
     implementation(platform(libs.spring.cloud.dependencies))
     implementation(platform(libs.spring.cloud.stream.dependencies))
 
-    implementation("org.springframework:spring-webmvc")
+    implementation("org.springframework.boot:spring-boot-starter-web")
 
 }

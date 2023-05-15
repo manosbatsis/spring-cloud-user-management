@@ -5,6 +5,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: update
+        database-platform: org.hibernate.dialect.H2Dialect
     datasource:
         url: jdbc:mysql://${MYSQL_HOST:localhost}:${MYSQL_PORT:3306}/userdb?characterEncoding=UTF-8&serverTimezone=UTC
         username: root
