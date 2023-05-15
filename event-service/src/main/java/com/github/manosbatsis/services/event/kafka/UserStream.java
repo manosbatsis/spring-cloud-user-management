@@ -27,7 +27,7 @@ public class UserStream {
         return message -> {
             try {
                 UserEvent userEvent = userMapper.createUserEvent(message);
-                userEventService.save(userEvent);
+                userEventService.saveUserEvent(userEvent);
             } catch (Exception e) {
                 log.error("An error occurred while saving userEvent {}", message, e);
                 e.printStackTrace();

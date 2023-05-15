@@ -32,7 +32,7 @@ class UserEventServiceImplTest {
     void testGetUserEventsWhenThereIsNone() {
         given(userEventRepository.findByKeyUserId(anyLong())).willReturn(Collections.emptyList());
 
-        List<UserEvent> userEvents = userEventService.findByUserId(1L);
+        List<UserEvent> userEvents = userEventService.getUserEvents(1L);
 
         assertThat(userEvents).isNotNull();
         assertThat(userEvents).isEmpty();
@@ -44,7 +44,7 @@ class UserEventServiceImplTest {
         given(userEventRepository.findByKeyUserId(anyLong()))
                 .willReturn(Collections.singletonList(userEvent));
 
-        List<UserEvent> userEvents = userEventService.findByUserId(1L);
+        List<UserEvent> userEvents = userEventService.getUserEvents(1L);
 
         assertThat(userEvents).isNotNull();
         assertThat(userEvents.size()).isEqualTo(1);
@@ -56,7 +56,7 @@ class UserEventServiceImplTest {
         UserEvent userEvent = getDefaultUserEvent();
         given(userEventRepository.save(any(UserEvent.class))).willReturn(userEvent);
 
-        UserEvent userEventSaved = userEventService.save(userEvent);
+        UserEvent userEventSaved = userEventService.saveUserEvent(userEvent);
 
         assertThat(userEventSaved).isNotNull();
         assertThat(userEventSaved).isEqualTo(userEvent);

@@ -37,12 +37,9 @@ public class UserController {
 
     @GetMapping
     public List<UserResponse> getUsers() {
-        List<UserResponse> entries =
-                userService.getUsers().stream()
-                        .map(userMapper::toUserResponse)
-                        .collect(Collectors.toList());
-
-        return entries;
+        return userService.getUsers().stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")

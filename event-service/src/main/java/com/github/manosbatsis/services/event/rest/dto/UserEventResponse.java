@@ -1,8 +1,6 @@
 package com.github.manosbatsis.services.event.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonGetter;
-import com.fasterxml.jackson.annotation.JsonRawValue;
 
 import java.util.Date;
 
@@ -14,10 +12,4 @@ public record UserEventResponse(
                         timezone = "UTC")
                 Date datetime,
         String type,
-        @JsonRawValue String data) {
-
-    @JsonGetter("id")
-    public String getId() {
-        return userId + "-" + datetime.getTime();
-    }
-}
+        String data) {}

@@ -1,16 +1,14 @@
 # Spring Cloud User Management (Java) [![CI](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml)
 
 <!-- TOC -->
-* [Spring Cloud User Management (Java) ![CI](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml/badge.svg)](#spring-cloud-user-management-java-)
+* [spring-cloud-user-management-java](#spring-cloud-user-management-java)
   * [Overview](#overview)
     * [Prerequisites](#prerequisites)
     * [Modules](#modules)
-  * [Build HowTo](#build-howto)
-  * [Test HowTo](#test-howto)
-    * [Launch Containers](#launch-containers)
-    * [Manual API Test](#manual-api-test)
-  * [Reference](#reference)
-    * [Links](#links)
+  * [HowTo](#howto)
+    * [Build](#build)
+    * [Manual Test](#manual-test)
+  * [Docker Reference](#docker-reference)
     * [user-service](#user-service)
     * [event-service](#event-service)
     * [email-service](#email-service)
@@ -45,8 +43,6 @@ That said, it does accommodate the following requirements:
     and [Kafka](https://kafka.apache.org/).
    - Persistence using [Cassandra](https://cassandra.apache.org) and JPA with [MySQL](https://www.mysql.com/).
 7. Distributed tracing and timing/latency data with [Zipkin](https://zipkin.io/).
-8. A rudimentary UI for user CRUD based on [react-admin](https://marmelab.com/react-admin/).
-
 
 ### Prerequisites
 
@@ -65,7 +61,9 @@ That said, it does accommodate the following requirements:
 - email-service: Additional consumer for user events, sends welcome email to new users.
 - lib-core and lib-test: Provide trivial utilities to main modules.
 
-## Build HowTo
+## HowTo
+
+### Build
 
 1. Clone the project from GitHub and navigate to the project directory using a terminal.
 2. To build the project and running both unit and integration tests, run:
@@ -74,9 +72,7 @@ That said, it does accommodate the following requirements:
 
 You can append `-x test` and/or omit `integrationTest` to skip unit and integration tests respectively.
 
-## Test HowTo
-
-### Launch Containers
+### Manual Test
 
 1. Navigate to the project directory using a terminal and build the docker images:
 
@@ -86,23 +82,7 @@ You can append `-x test` and/or omit `integrationTest` to skip unit and integrat
 
    `./start-apps.sh`
 
-
-### Manual UI Test
-
-> Before a manual UI test, make sure you have [build and launched](#launch-containers) the containers.
-
-To start the react-admin UI, navigate into the __admin-ui__ directory (under the project) and run:
-
-    `npm run dev`
-
-Then, point your browser to http://localhost:5173
-
-
-### Manual API Test
-
-> Before a manual API test, make sure you have [build and launched](#launch-containers)  the containers.
-
-To create a user, visit the `user-service` swagger at http://localhost:9080/swagger-ui/index.html
+3. To create a user, visit the `user-service` swagger at http://localhost:9080/swagger-ui/index.html
     ([preview](https://raw.githubusercontent.com/manosbatsis/spring-cloud-user-management-java/src/doc/img/user-service-swagger-create-user.png)) or run:
 
 ```
@@ -118,7 +98,7 @@ curl -X 'POST' \
 }'
 ```
 
-To view the user events, visit the `event-service`  swagger at http://localhost:9081/swagger-ui/index.html
+4. To view the user events, visit the `event-service`  swagger at http://localhost:9081/swagger-ui/index.html
    ([preview](user-service-swagger-create-user.png)) or run:
 
 ```
@@ -128,11 +108,11 @@ curl -X 'GET' \
 }'
 ```
 
-Stop everything, with:
+5. Stop everything, with:
 
    `./stop-apps.sh`
 
-To remove the Docker images created by this project, go to a terminal and, inside `spring-cloud-user-management` root folder, run the following script
+6. To remove the Docker images created by this project, go to a terminal and, inside `spring-cloud-user-management` root folder, run the following script
 
     `./remove-docker-images.sh`
 

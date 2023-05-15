@@ -85,7 +85,7 @@ docker run -d --rm --name gateway-service -p 8060:8060 \
 wait_for_container_log "gateway-service" "Started GatewayApplication"
 
 echo
-echo "Done. You might need to wait a few seconds for the service registry to refresh!"
+echo "Done:"
 printf "\n"
 printf "%14s | %37s |\n" "Application      " "URL                                        "
 printf "%14s + %37s |\n" "-----------------" "-------------------------------------------"
