@@ -8,6 +8,7 @@
   * [Build HowTo](#build-howto)
   * [Test HowTo](#test-howto)
     * [Launch Containers](#launch-containers)
+    * [Manual UI Test](#manual-ui-test)
     * [Manual API Test](#manual-api-test)
   * [Reference](#reference)
     * [Links](#links)
