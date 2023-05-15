@@ -2,9 +2,11 @@
 rootProject.name = "spring-cloud-user-management"
 
 include(
+    "admin-ui",
     "config-service",
     "discovery-service",
     "gateway-service",
+    "lib-avro",
     "lib-core",
     "lib-test",
     "user-service",

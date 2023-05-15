@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.spring)
     alias(libs.plugins.dokka)
     alias(libs.plugins.buildconfig)
+    id("com.github.davidmc24.gradle.plugin.avro")
 }
 
 java {
@@ -27,6 +28,7 @@ dependencies {
     implementation(platform(libs.spring.boot.dependencies))
     implementation(platform(libs.spring.cloud.dependencies))
     implementation(platform(libs.spring.cloud.stream.dependencies))
+    implementation(libs.spring.cloud.schema.registry.client)
 
     implementation("org.springframework:spring-webmvc")
 

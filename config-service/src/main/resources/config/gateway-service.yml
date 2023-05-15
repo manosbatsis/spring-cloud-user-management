@@ -1,5 +1,5 @@
 server:
-  port: 8060
+    port: 8060
 
 eureka:
     client:
@@ -19,45 +19,57 @@ logging:
     pattern: "%d{yyyy-MM-dd HH:mm:ss} [${spring.application.name:},%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
 
 spring:
-  application:
+    application:
         name: gateway-service
-  output:
-    ansi:
-      enabled: always
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-      routes:
-          - id: user-service
-            uri: lb://user-service
-            predicates:
-                - Path=/user/**
-            filters:
-                - RewritePath=/user/(?<path>.*), /$\{path}
-          - id: event-service
-            uri: lb://event-service
-            predicates:
-                - Path=/event/**
-            filters:
-                - RewritePath=/event/(?<path>.*), /$\{path}
-          - id: openapi
-            uri: http://localhost:${server.port}
-            predicates:
-                - Path=/v3/api-docs/**
-            filters:
-                - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+    output:
+        ansi:
+            enabled: always
+    cloud:
+        gateway:
+            discovery:
+                locator:
+                    enabled: true
+            globalcors:
+                corsConfigurations:
+                    '[/**]':
+                        allowed-origin-patterns: "*"
+                        allowed-headers: "*"
+                        exposed-headers: "X-Total-Count"
+                        allowed-methods:
+                            - GET
+                            - PUT
+                            - POST
+                            - OPTIONS
+                            - DELETE
+            routes:
+                -   id: user-service
+                    uri: lb://user-service
+                    predicates:
+                        - Path=/user/**
+                    filters:
+                        - RewritePath=/user/(?<path>.*), /$\{path}
+                -   id: event-service
+                    uri: lb://event-service
+                    predicates:
+                        - Path=/event/**
+                    filters:
+                        - RewritePath=/event/(?<path>.*), /$\{path}
+                -   id: openapi
+                    uri: http://localhost:${server.port}
+                    predicates:
+                        - Path=/v3/api-docs/**
+                    filters:
+                        - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
 
 springdoc:
-  swagger-ui:
-    urls:
-      - name: user
-        url: /v3/api-docs/user
-      - name: event
-        url: /v3/api-docs/event
+    swagger-ui:
+        urls:
+            -   name: user
+                url: /v3/api-docs/user
+            -   name: event
+                url: /v3/api-docs/event
 
 management:
-  tracing:
-    sampling:
-      probability: 1.0
+    tracing:
+        sampling:
+            probability: 1.0
