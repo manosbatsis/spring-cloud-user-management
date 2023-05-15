@@ -27,7 +27,7 @@ Please note this codebase is not considered proper in any way and is only intend
 
 That said, it does accommodate the following requirements:
 
-1. It is a self-contained Java project based on [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
+1. It is a self-contained Java project (alternatively, see the [Kotlin-based](https://github.com/manosbatsis/spring-cloud-user-management-java/tree/kotlin) branch) based on [Spring Boot](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/).
 2. The build produces Docker images for all service artifacts and can be run by a single shell script (see sections bellow)
 3. When creating a user, the email-service module will send out a welcome email. The project uses
    [GreenMail](https://greenmail-mail-test.github.io/greenmail/), an open source email server,
