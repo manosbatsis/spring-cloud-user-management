@@ -30,4 +30,7 @@ dependencies {
     implementation(platform(libs.spring.cloud.stream.dependencies))
     implementation(libs.kotlin.utils.api)
     implementation(libs.spring.cloud.schema.registry.client)
+
+    implementation("org.springframework:spring-webmvc")
+
 }

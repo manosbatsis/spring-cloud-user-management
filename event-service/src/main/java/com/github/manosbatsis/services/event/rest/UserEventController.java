@@ -25,8 +25,15 @@ public class UserEventController {
     private final UserMapper userMapper;
 
     @GetMapping
-    public List<UserEventResponse> getUserEvents(@RequestParam(name = "userId") Long id) {
-        return userEventService.getUserEvents(id).stream()
+    public List<UserEventResponse> getUserEvents(@RequestParam(name = "userId") Long userId) {
+        return userEventService.findByUserId(userId).stream()
+                .map(userMapper::toUserEventResponse)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("all")
+    public List<UserEventResponse> getUserEvents() {
+        return userEventService.findAll().stream()
                 .map(userMapper::toUserEventResponse)
                 .collect(Collectors.toList());
     }
