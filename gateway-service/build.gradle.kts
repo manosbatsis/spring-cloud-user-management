@@ -11,6 +11,24 @@ java {
     withSourcesJar()
 }
 
+tasks.register<Copy>("processFrontendResources") {
+    val frontendBuildDir = file("../admin-ui/dist")
+    val frontendResourcesDir = file("${project.buildDir}/resources/main/static")
+
+    group = "Frontend"
+    description = "Process frontend resources"
+    dependsOn(project(":admin-ui").tasks.named("assembleFrontend"))
+
+    from(frontendBuildDir)
+    into(frontendResourcesDir)
+}
+
+listOf("resolveMainClassName", "jar", "bootJar", "javadoc").forEach {
+    tasks.named(it) {
+        dependsOn(tasks.named("processFrontendResources"))
+    }
+}
+
 dependencies {
     implementation(platform(libs.spring.boot.dependencies))
     implementation(platform(libs.spring.cloud.dependencies))

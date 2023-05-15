@@ -92,13 +92,7 @@ You can append `-x test` and/or omit `integrationTest` to skip unit and integrat
 
 > Before a manual UI test, make sure you have [build and launched](#launch-containers) the containers.
 
-To start the react-admin UI, either:
-
-- From the root project folder, run `./gradlew :admin-ui:start`
-- Alternatively, e.g. to test with your own version of Node, navigate into the __admin-ui__ directory (under the project) and run: `npm run dev`
-
-Then, point your browser to http://localhost:5173
-
+The react-admin web UI is available via the gateway and can be used by pointing your browser to http://localhost:8060
 
 ### Manual API Test
 
