@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, kotlin ]
   pull_request:
-    branches: [ master ]
+    branches: [ master, kotlin ]
 
 # This allows a subsequently queued workflow run to interrupt previous runs
 concurrency:
