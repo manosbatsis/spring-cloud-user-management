@@ -42,7 +42,7 @@ class UserEventControllerTest {
 
     @Test
     void testGetUserEventsWhenThereIsNone() throws Exception {
-        given(userEventService.getUserEvents(anyLong())).willReturn(Collections.emptyList());
+        given(userEventService.findByUserId(anyLong())).willReturn(Collections.emptyList());
 
         ResultActions resultActions = mockMvc.perform(get("/api/events?userId=1")).andDo(print());
 
@@ -56,7 +56,7 @@ class UserEventControllerTest {
     void testGetUserEventsWhenThereIsOne() throws Exception {
         UserEvent userEvent = new UserEvent(new UserEventKey(1L, new Date()), "type", "data");
 
-        given(userEventService.getUserEvents(anyLong()))
+        given(userEventService.findByUserId(anyLong()))
                 .willReturn(Collections.singletonList(userEvent));
 
         ResultActions resultActions =

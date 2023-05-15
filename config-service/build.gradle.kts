@@ -12,7 +12,7 @@ java {
 }
 
 dependencies {
-    implementation(project(":lib-core"))
+    implementation(project(":lib-avro"))
     implementation(platform(libs.spring.boot.dependencies))
     implementation(platform(libs.spring.cloud.dependencies))
     implementation(platform(libs.spring.cloud.stream.dependencies))
