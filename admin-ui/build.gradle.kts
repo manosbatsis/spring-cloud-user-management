@@ -1,6 +1,3 @@
-import org.siouan.frontendgradleplugin.infrastructure.gradle.CleanTask
-import org.siouan.frontendgradleplugin.infrastructure.gradle.RunNpm
-
 plugins {
     id("org.siouan.frontend-jdk11") version "6.0.0"
 }
@@ -18,19 +15,4 @@ tasks.named("spotlessMisc") {
 tasks.register<Copy>("copyDist") {
     from("$projectDir/dist")
     into("../gateway-service/src/main/resources/web/dist/")
-}
-
-
-tasks.register<RunNpm>("start") {
-    group = "application"
-    description = "Runs this web application in development mode."
-    dependsOn("installNode", "installYarn", "installFrontend")
-
-    script.set("start")
-}
-
-tasks.named<CleanTask>("cleanFrontend") {
-    doLast {
-        delete(buildDir)
-    }
 }
