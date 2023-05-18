@@ -2,22 +2,22 @@
 <h1>Spring Cloud User Management</h1>
 
 <!-- TOC -->
-  * [Overview](#overview)
-    * [Prerequisites](#prerequisites)
-    * [Modules](#modules)
-  * [Build HowTo](#build-howto)
-  * [Test HowTo](#test-howto)
-    * [Launch Containers](#launch-containers)
-    * [Manual UI Test](#manual-ui-test)
-    * [Manual API Test](#manual-api-test)
-  * [Reference](#reference)
-    * [Links](#links)
-    * [user-service](#user-service)
-    * [event-service](#event-service)
-    * [email-service](#email-service)
-    * [Useful Commands](#useful-commands)
-      * [MySQL](#mysql)
-      * [Cassandra](#cassandra)
+* [Overview](#overview)
+	* [Prerequisites](#prerequisites)
+	* [Modules](#modules)
+* [Build HowTo](#build-howto)
+* [Test HowTo](#test-howto)
+	* [Launch Containers](#launch-containers)
+	* [Manual UI Test](#manual-ui-test)
+	* [Manual API Test](#manual-api-test)
+* [Reference](#reference)
+	* [Links](#links)
+	* [user-service](#user-service)
+	* [event-service](#event-service)
+	* [email-service](#email-service)
+	* [Useful Commands](#useful-commands)
+	* [MySQL](#mysql)
+	* [Cassandra](#cassandra)
 <!-- TOC -->
 
 ## Overview

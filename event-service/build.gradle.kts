@@ -27,7 +27,6 @@ dependencies {
 
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.mapstruct.core)
-    kapt(libs.mapstruct.processor)
 
     testImplementation(project(":lib-test"))
     testImplementation(platform(libs.testcontainers.bom))

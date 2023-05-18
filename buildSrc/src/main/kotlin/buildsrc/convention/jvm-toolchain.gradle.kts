@@ -16,7 +16,6 @@ plugins {
     `java-library`
     id("org.jetbrains.kotlin.jvm")
     id("org.jetbrains.dokka")
-    //id("org.jetbrains.kotlin.kapt")
 }
 
 java {
@@ -84,12 +83,4 @@ tasks.withType<Test>().configureEach {
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-
-    implementation(libs.lombok)
-    annotationProcessor(libs.lombok)
-    testCompileOnly(libs.lombok)
-    testAnnotationProcessor(libs.lombok)
-    "integrationTestCompileOnly"(libs.lombok)
-    "integrationTestAnnotationProcessor"(libs.lombok)
-
 }
