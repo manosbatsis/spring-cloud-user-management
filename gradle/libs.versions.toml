@@ -1,4 +1,5 @@
 [versions]
+davidmc24-avro-version = "1.2.1"
 awaitility-version = '4.2.0'
 awaitility-proxy-version = '3.1.6'
 buildconfig-version = '3.1.0'
@@ -6,14 +7,17 @@ cassandra-unit-version = '4.3.1.0'
 dokka-version = '1.8.10'
 evo-inflector-version = '1.3'
 flapdoodle-mongo-version = '4.6.2'
+freefair-lombok-version = '8.0.1'
 greenmail-junit5-version = '2.0.0'
 javafaker-version = '1.0.2'
 junit-version = '5.8.2'
 kotlinpoet-version = '1.12.0'
 kotlin-version = '1.8.10'
 kotlin-utils-version = '0.37'
+lombok-version = '1.18.26'
 mapstruct-version = '1.5.5.Final'
 nexus-publish-version = '1.1.0'
+palantir-version = '0.35.0'
 spring-boot-version = '3.0.5'
 spring-cloud-version = '2022.0.2'
 spring-cloud-stream-version = '4.0.2'
@@ -25,7 +29,7 @@ springdoc-openapi-starter-webmvc-ui-version = '2.1.0'
 springdoc-openapi-starter-webflux-version = '2.1.0'
 spotless-version = '6.18.0'
 strikt-version = '0.33.0'
-testcontainers-version = '1.18.0'
+testcontainers-version = '1.18.1'
 perplexhub-rsql-version = '6.0.4'
 wimdeblauwe-error-handling-spring-boot-version = '4.1.0'
 
@@ -37,26 +41,31 @@ confluent-kafka-schema-registry-client-version = '5.3.0'
 awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility-version" }
 awaitility-proxy = { module = "org.awaitility:awaitility-proxy", version.ref = "awaitility-proxy-version" }
 cassandra-unit-spring = { module = "org.cassandraunit:cassandra-unit-spring", version.ref = "cassandra-unit-version" }
+dokka-gradle = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka-version" }
 evo-inflector = { module = "org.atteo:evo-inflector", version.ref = "evo-inflector-version" }
+freefair-gradle = { module = "io.freefair.gradle:lombok-plugin", version.ref = "freefair-lombok-version" }
 greenmail-junit5 = { module = "com.icegreen:greenmail-junit5", version.ref = "greenmail-junit5-version" }
 javafaker = { module = "com.github.javafaker:javafaker", version.ref = "javafaker-version" }
 junit = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-version" }
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet-version" }
 kotlin-utils-api = { module = "com.github.manosbatsis.kotlin-utils:kotlin-utils-api", version.ref = "kotlin-utils-version" }
 kotlin-utils-kapt = { module = "com.github.manosbatsis.kotlin-utils:kotlin-utils-kapt", version.ref = "kotlin-utils-version" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok-version" }
 mapstruct-core = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct-version" }
 mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct-version" }
+palantir-docker = { module = "com.palantir.gradle.docker:gradle-docker", version.ref = "palantir-version" }
 strikt = { module = "io.strikt:strikt-core", version.ref = "strikt-version" }
 springdoc-openapi-starter-webmvc-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc-openapi-starter-webmvc-ui-version" }
 springdoc-openapi-kotlin = { module = "org.springdoc:springdoc-openapi-kotlin", version.ref = "springdoc-version" }
 springdoc-openapi-starter-webflux-api = { module = "org.springdoc:springdoc-openapi-starter-webflux-api", version.ref = "springdoc-openapi-starter-webflux-version" }
 springdoc-openapi-starter-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc-openapi-starter-webflux-version" }
-
+spring-boot-gradle = { module = "org.springframework.boot:spring-boot-gradle-plugin", version.ref = "spring-boot-version" }
 spring-boot-dependencies = { module = "org.springframework.boot:spring-boot-dependencies", version.ref = "spring-boot-version" }
 spring-cloud-dependencies = { module = "org.springframework.cloud:spring-cloud-dependencies", version.ref = "spring-cloud-version" }
 spring-cloud-schema-registry-client = { module = "org.springframework.cloud:spring-cloud-schema-registry-client", version.ref = "spring-cloud-schema-registry-client-version" }
 spring-cloud-stream-dependencies = { module = "org.springframework.cloud:spring-cloud-stream-dependencies", version.ref = "spring-cloud-stream-version" }
 spring-cloud-stream-schema = { module = "org.springframework.cloud:spring-cloud-stream-schema", version.ref = "spring-cloud-stream-schema-version" }
+spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless-version" }
 testcontainers-bom = { module = "org.testcontainers:testcontainers-bom", version.ref = "testcontainers-version" }
 rsql-jpa-spring-boot-starter = { module = "io.github.perplexhub:rsql-jpa-spring-boot-starter", version.ref = "perplexhub-rsql-version" }
 error-handling-spring-boot-starter = { module = "io.github.wimdeblauwe:error-handling-spring-boot-starter", version.ref = "wimdeblauwe-error-handling-spring-boot-version" }
@@ -65,10 +74,12 @@ confluent-kafka-serde-tools-package-serializer = { module = "io.confluent:kafka-
 confluent-kafka-avro-serializer = { module = "io.confluent:kafka-avro-serializer", version.ref = "confluent-kafka-avro-serializer-version" }
 confluent-kafka-schema-registry-client = { module = "io.confluent:kafka-schema-registry-client", version.ref = "confluent-kafka-schema-registry-client-version" }
 
+
 [bundles]
 confluent-kafka-avro = ["confluent-kafka-serde-tools-package-serializer", "confluent-kafka-avro-serializer", "confluent-kafka-schema-registry-client"]
 
 [plugins]
+avro = { id = "com.github.davidmc24.gradle.plugin.avro", version.ref = "davidmc24-avro-version" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig-version" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka-version" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin-version" }
@@ -76,7 +87,11 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin-version"
 kotlin-noarg = { id = "org.jetbrains.kotlin.plugin.noarg", version.ref = "kotlin-version" }
 kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin-version" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-version" }
+lombok = { id = "io.freefair.lombok", version.ref = "freefair-lombok-version" }
 nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexus-publish-version" }
+palantir-docker = { id = "com.palantir.docker", version.ref = "palantir-version" }
+palantir-docker-run = { id = "com.palantir.docker-run", version.ref = "palantir-version" }
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot-version" }
 spring-dependencymanager = { id = "io.spring.dependency-management", version.ref = "spring-boot-management-version" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless-version" }
+

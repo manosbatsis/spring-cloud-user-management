@@ -1,12 +1,6 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.dokka)
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
+    buildsrc.convention.`jvm-toolchain`
+    buildsrc.convention.`spotless`
 }
 
 dependencies {

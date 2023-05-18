@@ -5,8 +5,8 @@ import com.github.manosbatsis.services.email.model.EmailRecepient;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.env.Environment;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-@Slf4j
 @Component
 public class EmailService {
     private static final String TEMPLATE_NAME = "html/registration";
@@ -30,6 +29,8 @@ public class EmailService {
     private final JavaMailSender mailSender;
 
     private final TemplateEngine htmlTemplateEngine;
+
+    private static Logger log = LoggerFactory.getLogger(EmailService.class);
 
     @Value("${properties.mail.smtp.from:'EMPTY_MAIL_SENDER'}")
     private String mailFrom;

@@ -1,14 +1,9 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.dokka)
+    buildsrc.convention.`jvm-toolchain`
+    buildsrc.convention.`spotless`
     alias(libs.plugins.buildconfig)
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
 
 sourceSets.main.configure {
     resources.srcDir("src/main").includes.addAll(arrayOf("avro/*.*"))

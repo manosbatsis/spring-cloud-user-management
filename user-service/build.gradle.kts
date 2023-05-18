@@ -1,42 +1,15 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.dokka)
-    id("org.springframework.boot")
-    id("com.palantir.docker")
+    buildsrc.convention.`spring-boot`
+    buildsrc.convention.`docker`
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-val integrationTest by sourceSets.creating{
-    java.srcDir(projectDir.resolve("src/integrationTest/java"))
-    resources.srcDir(projectDir.resolve("src/integrationTest/resources"))
-    compileClasspath += sourceSets.main.get().output// + sourceSets.test.get().output
-    runtimeClasspath += sourceSets.main.get().output// + sourceSets.test.get().output
-}
-configurations[integrationTest.apiConfigurationName].extendsFrom(configurations.api.get())
-configurations[integrationTest.implementationConfigurationName].extendsFrom(configurations.implementation.get())
-configurations[integrationTest.runtimeOnlyConfigurationName].extendsFrom(configurations.runtimeOnly.get())
-configurations[integrationTest.compileOnlyConfigurationName].extendsFrom(configurations.compileOnly.get())
-//configurations[integrationTest.compileClasspathConfigurationName].extendsFrom(configurations.compileClasspath.get())
-
-val integrationTestTask = tasks.register<Test>("integrationTest") {
+tasks.getByName<Test>("integrationTest") {
     dependsOn(
         ":config-service:docker",
         ":discovery-service:docker",
         ":event-service:docker",
-        ":email-service:docker")
-    description = "Runs integration tests."
-    group = "verification"
-    useJUnitPlatform()
-
-    testClassesDirs = integrationTest.output.classesDirs
-    classpath = integrationTest.runtimeClasspath// + integrationTest.output
-
-    shouldRunAfter(tasks.test)
+        ":email-service:docker"
+    )
 }
 
 dependencies {
@@ -55,18 +28,16 @@ dependencies {
     implementation("io.zipkin.reporter2:zipkin-reporter-brave")
 
     implementation(libs.spring.cloud.schema.registry.client)
-    //implementation("org.springframework.cloud:spring-cloud-schema-registry-client")
     implementation("org.springframework.cloud:spring-cloud-starter-config")
     implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client")
 
     implementation("org.springframework.cloud:spring-cloud-stream")
-    //implementation("org.springframework.cloud:spring-cloud-stream-binder-kafka-streams")
     implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
-    //implementation("org.springframework.kafka:spring-kafka")
 
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     implementation(libs.mapstruct.core)
     annotationProcessor(libs.mapstruct.processor)
+
     runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("com.h2database:h2")
 
@@ -76,7 +47,8 @@ dependencies {
     testImplementation("org.springframework.cloud:spring-cloud-stream-test-binder")
     testImplementation(libs.awaitility)
     testImplementation(libs.awaitility.proxy)
-    testImplementation(libs.javafaker)
+    testImplementation(libs.javafaker){ exclude("org.yaml", "snakeyaml") }
+    testImplementation("org.yaml:snakeyaml")
     testImplementation(libs.greenmail.junit5)
 
     "integrationTestImplementation"(project(":lib-test"))
@@ -88,26 +60,6 @@ dependencies {
     "integrationTestImplementation"("org.testcontainers:junit-jupiter")
     "integrationTestImplementation"(libs.awaitility)
     "integrationTestImplementation"(libs.awaitility.proxy)
-    "integrationTestImplementation"(libs.javafaker)
-}
-
-val bootJarTask = tasks.bootJar.get()
-val archivePath = bootJarTask.archiveFileName.get()
-val dockerFilePath = "${projectDir.path}/Dockerfile"
-val projectName = "${project.group}/${project.name}"
-val fullName = "$projectName:${project.version}"
-val dockerBuildArgs = mapOf("JAR_FILE" to archivePath)
-
-// workaround from https://github.com/palantir/gradle-docker/issues/413
-tasks.docker {
-    inputs.file(dockerFilePath)
-}
-
-docker {
-    name = fullName
-    tag("latest", "$projectName:${project.version}")
-    pull(true)
-    setDockerfile(file(dockerFilePath))
-    files(bootJarTask.outputs)
-    buildArgs(dockerBuildArgs)
+    "integrationTestImplementation"(libs.javafaker){ exclude("org.yaml", "snakeyaml") }
+    "integrationTestImplementation"("org.yaml:snakeyaml")
 }
