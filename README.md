@@ -1,25 +1,23 @@
 [![CI](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml/badge.svg)](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml)
-
 <h1>Spring Cloud User Management</h1>
 
 <!-- TOC -->
-* [Spring Cloud User Management (Java) ![CI](https://github.com/manosbatsis/spring-cloud-user-management-java/actions/workflows/gradle.yml/badge.svg)](#spring-cloud-user-management-java-)
-* [Overview](#overview)
-	* [Prerequisites](#prerequisites)
-	* [Modules](#modules)
-* [Build HowTo](#build-howto)
-* [Test HowTo](#test-howto)
-	* [Launch Containers](#launch-containers)
-	* [Manual UI Test](#manual-ui-test)
-	* [Manual API Test](#manual-api-test)
-* [Reference](#reference)
-	* [Links](#links)
-	* [user-service](#user-service)
-	* [event-service](#event-service)
-	* [email-service](#email-service)
-	* [Useful Commands](#useful-commands)
-	* [MySQL](#mysql)
-	* [Cassandra](#cassandra)
+  * [Overview](#overview)
+    * [Prerequisites](#prerequisites)
+    * [Modules](#modules)
+  * [Build HowTo](#build-howto)
+  * [Test HowTo](#test-howto)
+    * [Launch Containers](#launch-containers)
+    * [Manual UI Test](#manual-ui-test)
+    * [Manual API Test](#manual-api-test)
+  * [Reference](#reference)
+    * [Links](#links)
+    * [user-service](#user-service)
+    * [event-service](#event-service)
+    * [email-service](#email-service)
+    * [Useful Commands](#useful-commands)
+      * [MySQL](#mysql)
+      * [Cassandra](#cassandra)
 <!-- TOC -->
 
 ## Overview
