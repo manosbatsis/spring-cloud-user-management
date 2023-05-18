@@ -2,12 +2,14 @@ import org.siouan.frontendgradleplugin.infrastructure.gradle.CleanTask
 import org.siouan.frontendgradleplugin.infrastructure.gradle.RunNpm
 
 plugins {
+    buildsrc.convention.`spotless`
     id("org.siouan.frontend-jdk11") version "6.0.0"
 }
 
 frontend {
-    nodeDistributionProvided.set(false)
+    //  nodeDistributionProvided.set(false)
     nodeVersion.set("18.15.0")
+    nodeInstallDirectory.set(file("${projectDir}/node"))
     assembleScript.set("run build") // "run build --mode development"
     checkScript.set("run lint --no-fix --max-warnings")
 

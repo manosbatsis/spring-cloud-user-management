@@ -1,18 +1,16 @@
 
 rootProject.name = "spring-cloud-user-management"
 
-include(
-    "admin-ui",
-    "config-service",
-    "discovery-service",
-    "gateway-service",
-    "lib-avro",
-    "lib-core",
-    "lib-test",
-    "user-service",
-    "email-service",
-    "event-service",
-)
+// Find and include modules
+fileTree(".")
+    .matching {
+        exclude("buildSrc/**", "**/src/**", "**/build/**", "**/.*")
+        include("**/build.gradle", "**/build.gradle.kts")
+    }.map {
+        it.parentFile.toRelativeString(rootProject.projectDir)
+    }.forEach {
+        include(":${it.replace('/', ':')}")
+    }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
